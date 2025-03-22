@@ -1,0 +1,259 @@
+
+R version 4.4.3 (2025-02-28) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-suse-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+- Project '/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r' loaded. [renv 1.1.4]
+[Previously saved workspace restored]
+
+> # To run the script, download the relevant packages:
+> # install.packages("data.table")
+> # install.packages("fst")
+> # install.packages("statar")
+> # install.packages("fixest")
+> # install.packages("ggplot")
+> # install.packages("here")
+> 
+> 
+> # loading packages
+> library(data.table)
+> library(fixest)
+> library(statar)
+> library(fst)
+> library(ggplot2)
+> library(here)
+here() starts at /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+> 
+> 
+> # setting options
+> # Determine the cores to available
+> available_cores <- parallel::detectCores()
+> # Decide whether to start fresh or append
+> restart = FALSE
+> 
+> if (restart) {
++ 	# remove the output folder
++ 	unlink(here("output"), recursive = TRUE)
++ }
+> # create the output folder
+> if (!dir.exists(here("output"))) {
++ 	dir.create(here("output"))
++ }
+> # write out the number of cores used to a CSV file, identifying they were used in R
+> # do not overwrite, but rather append to the file
+> message("Available cores:", available_cores, "\n")
+Available cores:24
+
+> 
+> write.csv(data.frame(cores = available_cores), file = here("output", "cores.csv"), row.names = FALSE, append = TRUE)
+Warning message:
+In write.csv(data.frame(cores = available_cores), file = here("output",  :
+  attempt to set 'append' ignored
+> 
+> options(mc.cores=available_cores)
+> setFixest_nthreads(available_cores)
+> 
+> # creating the file to merge with
+> write.fst(fread(here("data", "merge_string.csv"), data.table = FALSE), here("data", "merge_string.fst"))
+> write.fst(fread(here("data", "merge_int.csv"), data.table = FALSE), here("data", "merge_int.fst"))
+> 
+> 
+> 
+> # define the time function
+> time <- function(x){system.time(x)[3]}
+> 
+> 
+> out <- NULL
+> names <- NULL
+> i <- 0
+> 
+> # write and read
+>  
+> names <- append(names, "open csv")
+> out <- append(out, time(DT <- fread(here("data", "1e7.csv"), data.table = FALSE)))
+> 
+> names <- append(names, "save binary")
+> out <- append(out, time(write.fst(DT, here("data", "1e7.fst"))))
+> 
+> names <- append(names, "open binary")
+> out <- append(out, time(DT <- read.fst(here("data", "1e7.fst"))))
+> 
+> # sort and duplicates  
+> setDT(DT)
+> 
+> names <- append(names, "sort string")
+> out <- append(out, time(setkeyv(DT, c("id3"))))
+> 
+> names <- append(names, "sort int")
+> out <- append(out, time(setkeyv(DT, c("id6"))))
+> 
+> names <- append(names, "sort float")
+> out <- append(out, time(setkeyv(DT, c("v3"))))
+> 
+> names <- append(names, "count distinct strings")
+> out <- append(out, time(uniqueN(DT, by = c("id3"))))
+> 
+> names <- append(names, "count distinct ints")
+> out <- append(out, time(uniqueN(DT, by = c("id6"))))
+> 
+> # merge 
+> DT <- read.fst(here("data", "1e7.fst")) 
+> setDT(DT)
+> f <- function(){
++     DT_merge <- read.fst(here("data", "merge_string.fst"))
++     setDT(DT_merge)
++     setkey(DT, id1, id3)
++     setkey(DT_merge, id1, id3)
++     merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
++ }
+> 
+> names <- append(names, "merge string")
+> out <- append(out, time(f()))
+> 
+> DT <- read.fst(here("data", "1e7.fst")) 
+> setDT(DT)
+> f <- function(){
++     DT_merge <- read.fst(here("data", "merge_int.fst"))
++     setDT(DT_merge)
++     setkey(DT, id4, id6)
++     setkey(DT_merge, id4, id6)
++     merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
++ }
+> 
+> names <- append(names, "merge int")
+> out <- append(out, time(f()))
+> 
+> 
+> # append 
+> 
+> names <- append(names, "append")
+> DT1 <- copy(DT) 
+> out <- append(out, time(rbindlist(list(DT,DT1), fill = TRUE)))
+> 
+> # reshape
+> DT <- read.fst(here("data", "1e7.fst")) 
+> setDT(DT)
+> DT1 <- unique(DT, by = c("id1", "id2", "id3"))
+> DT1 <- DT1[1:(nrow(DT1)/10),]
+> 
+> names <- append(names, "reshape long")
+> out <- append(out, time(DT2 <- melt(DT1, id.vars = c("id1", "id2", "id3"))))
+Warning message:
+In melt.data.table(DT1, id.vars = c("id1", "id2", "id3")) :
+  'measure.vars' [id4, id5, id6, v1, ...] are not all of the same type. By order of hierarchy, the molten data value column will be of type 'double'. All measure variables not of type 'double' will be coerced too. Check DETAILS in ?melt.data.table for more on coercion.
+> rm(DT1) 
+> 
+> names <- append(names, "reshape wide")
+> out <- append(out, time(DT3 <- dcast(DT2, id1 + id2 + id3 ~ variable, value.var = "value")))
+> rm(list = c("DT2", "DT3"))
+> 
+> # recode
+> f <- function(){
++     DT[v1 == 1, v1_name := "first"]
++     DT[v1 %in% c(2,3), v1_name := "second"]
++     DT[v1 %in% c(4,5), v1_name := "third"]
++ }
+> 
+> names <- append(names, "recode")
+> out <- append(out, time(f()))
+> DT[, v1_name := NULL]
+> 
+> # functions
+> 
+> names <- append(names, "xtile")
+> out <- append(out, time(DT[, temp := xtile(v3, 10)]))
+> DT[, temp := NULL] 
+> 
+> names <- append(names, "group strings")
+> out <- append(out, time(DT[, temp := .GRP, by =  c("id1", "id3")]))
+> DT[, temp := NULL]
+> 
+> names <- append(names, "group int")
+> out <- append(out, time(DT[, temp := .GRP, by =  c("id4", "id6")]))
+> DT[, temp := NULL]
+> 
+> # sum groups
+> 
+> names <- append(names, "sum over few groups (string)")
+> out <- append(out, time(DT[, temp := sum(v3, na.rm = TRUE), by = c("id1")]))
+> DT[, temp := NULL] 
+> 
+> names <- append(names, "sum over many groups (string)")
+> out <- append(out, time(DT[, temp := sum(v3, na.rm = TRUE), by = c("id3")]))
+> DT[, temp := NULL] 
+> 
+> names <- append(names, "sum over few groups (int)")
+> out <- append(out, time(DT[, temp := sum(v3, na.rm = TRUE), by = c("id4")]))
+> DT[, temp := NULL] 
+> 
+> names <- append(names, "sum over many groups (int)")
+> out <- append(out, time(DT[, temp := sum(v3, na.rm = TRUE), by = c("id6")]))
+> DT[, temp := NULL] 
+> 
+> 
+> # sd groups
+> 
+> names <- append(names, "sd over few groups (int)")
+> out <- append(out, time(DT[, temp := sd(v3, na.rm = TRUE), by = c("id4")]))
+> DT[, temp := NULL] 
+> 
+> names <- append(names, "sd over many groups (int)")
+> out <- append(out, time(DT[, temp := sd(v3, na.rm = TRUE), by = c("id6")]))
+> DT[, temp := NULL] 
+> 
+> 
+> 
+> # collapse large groups
+> 
+> names <- append(names, "collapse over few groups")
+> out <- append(out, time(DT[, list(v1 = mean(v1, na.rm = TRUE), v2 = mean(v2, na.rm = TRUE), v3 = sum(v3, na.rm = TRUE),  sd = sd(v3, na.rm = TRUE)), by = c("id1")]))
+> 
+> # collapse small groups
+> 
+> names <- append(names, "collapse over many groups")
+> out <- append(out, time(DT[, list(v1 = mean(v1, na.rm = TRUE), v2 = mean(v2, na.rm = TRUE), v3 = sum(v3, na.rm = TRUE),  sd = sd(v3, na.rm = TRUE)), by = c("id3")]))
+> 
+> 
+> # regress
+> DT1 <- DT[1:(nrow(DT)/2),]
+> 
+> names <- append(names, "reg")
+> out <- append(out, time(feols(v3 ~ v1 + v2 + id4 + id5, DT1)))
+> 
+> names <- append(names, "reg fe")
+> out <- append(out, time(feols(v3 ~ v2 + id4 + id5 + as.factor(v1), DT1)))
+> 
+> names <- append(names, "reg hfe")
+> ## Automatically clusters by id6 too
+> out <- append(out, time(feols(v3 ~ v2 + id4 + id5  + as.factor(v1) | id6, DT1))) 
+> 
+> names <- append(names, "reg 2 hfe")
+> ## Automatically clusters by id6 too)
+> out <- append(out, time(feols(v3 ~  v2 + id4 + id5  + as.factor(v1) | id6 + id3, DT1)))
+> 
+> # plot
+> 
+> names <- append(names, "plot 1000 points")
+> out <- append(out,  time(ggsave(here("output", "plot.pdf"), ggplot(DT1[1:1000], aes(x = v1, y = v2)) +  geom_point())))
+Saving 7 x 7 in image
+> 
+> # run benchmark
+> fwrite(data.table(command = names, result = out), here("output", "resultR1e7.csv"))
+> 
+> proc.time()
+   user  system elapsed 
+184.033  13.379  78.985 

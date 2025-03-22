@@ -1,6 +1,12 @@
 # To run the script, download the relevant packages:
 # install.packages("data.table")
 
+# ensure directory is there
+if (!dir.exists(here::here("data"))) {
+  dir.create(here::here("data"))
+}
+
+
 library(data.table)
 library(readr)
 K <- 20
@@ -17,8 +23,8 @@ DT <- data.table(
   v2 =  sample(1e6, N, TRUE),                        # int in range [1,1e6]
   v3 =  sample(round(runif(100,max=100),4), N, TRUE) # numeric e.g. 23.5749
 )
-fwrite(DT, "~/statabenchmark/1e7.csv")
-fwrite(unique(DT[, list(id1, id3)]),"~/statabenchmark/merge_string.csv")
-fwrite(unique(DT[, list(id4, id6)]),"~/statabenchmark/merge_int.csv")
+fwrite(DT, here::here("data","1e7.csv"))
+fwrite(unique(DT[, list(id1, id3)]), here::here("data", "merge_string.csv"))
+fwrite(unique(DT[, list(id4, id6)]), here::here("data", "merge_int.csv"))
 
 

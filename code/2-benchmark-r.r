@@ -4,6 +4,7 @@
 # install.packages("statar")
 # install.packages("fixest")
 # install.packages("ggplot")
+# install.packages("here")
 
 
 # loading packages
@@ -12,15 +13,35 @@ library(fixest)
 library(statar)
 library(fst)
 library(ggplot2)
+library(here)
 
 
 # setting options
-options(mc.cores=4)
-setFixest_nthreads(4)
+# Determine the cores to available
+available_cores <- parallel::detectCores()
+# Decide whether to start fresh or append
+restart = FALSE
+
+if (restart) {
+	# remove the output folder
+	unlink(here("output"), recursive = TRUE)
+}
+# create the output folder
+if (!dir.exists(here("output"))) {
+	dir.create(here("output"))
+}
+# write out the number of cores used to a CSV file, identifying they were used in R
+# do not overwrite, but rather append to the file
+message("Available cores:", available_cores, "\n")
+
+write.csv(data.frame(cores = available_cores), file = here("output", "cores.csv"), row.names = FALSE, append = TRUE)
+
+options(mc.cores=available_cores)
+setFixest_nthreads(available_cores)
 
 # creating the file to merge with
-write.fst(fread("~/statabenchmark/merge_string.csv", data.table = FALSE), "~/statabenchmark/merge_string.fst")
-write.fst(fread("~/statabenchmark/merge_int.csv", data.table = FALSE), "~/statabenchmark/merge_int.fst")
+write.fst(fread(here("data", "merge_string.csv"), data.table = FALSE), here("data", "merge_string.fst"))
+write.fst(fread(here("data", "merge_int.csv"), data.table = FALSE), here("data", "merge_int.fst"))
 
 
 
@@ -35,13 +56,13 @@ i <- 0
 # write and read
  
 names <- append(names, "open csv")
-out <- append(out, time(DT <- fread("~/statabenchmark/1e7.csv", data.table = FALSE)))
+out <- append(out, time(DT <- fread(here("data", "1e7.csv"), data.table = FALSE)))
 
 names <- append(names, "save binary")
-out <- append(out, time(write.fst(DT, "~/statabenchmark/1e7.fst")))
+out <- append(out, time(write.fst(DT, here("data", "1e7.fst"))))
 
 names <- append(names, "open binary")
-out <- append(out, time(DT <- read.fst("~/statabenchmark/1e7.fst")))
+out <- append(out, time(DT <- read.fst(here("data", "1e7.fst"))))
 
 # sort and duplicates  
 setDT(DT)
@@ -62,27 +83,27 @@ names <- append(names, "count distinct ints")
 out <- append(out, time(uniqueN(DT, by = c("id6"))))
 
 # merge 
-DT <- read.fst("~/statabenchmark/1e7.fst") 
+DT <- read.fst(here("data", "1e7.fst")) 
 setDT(DT)
 f <- function(){
-	DT_merge <- read.fst("~/statabenchmark/merge_string.fst")
-	setDT(DT_merge)
-	setkey(DT, id1, id3)
-	setkey(DT_merge, id1, id3)
-	merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
+    DT_merge <- read.fst(here("data", "merge_string.fst"))
+    setDT(DT_merge)
+    setkey(DT, id1, id3)
+    setkey(DT_merge, id1, id3)
+    merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
 }
 
 names <- append(names, "merge string")
 out <- append(out, time(f()))
 
-DT <- read.fst("~/statabenchmark/1e7.fst") 
+DT <- read.fst(here("data", "1e7.fst")) 
 setDT(DT)
 f <- function(){
-	DT_merge <- read.fst("~/statabenchmark/merge_int.fst")
-	setDT(DT_merge)
-	setkey(DT, id4, id6)
-	setkey(DT_merge, id4, id6)
-	merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
+    DT_merge <- read.fst(here("data", "merge_int.fst"))
+    setDT(DT_merge)
+    setkey(DT, id4, id6)
+    setkey(DT_merge, id4, id6)
+    merge(DT, DT_merge, all.x = TRUE, all.y = FALSE) 
 }
 
 names <- append(names, "merge int")
@@ -96,7 +117,7 @@ DT1 <- copy(DT)
 out <- append(out, time(rbindlist(list(DT,DT1), fill = TRUE)))
 
 # reshape
-DT <- read.fst("~/statabenchmark/1e7.fst") 
+DT <- read.fst(here("data", "1e7.fst")) 
 setDT(DT)
 DT1 <- unique(DT, by = c("id1", "id2", "id3"))
 DT1 <- DT1[1:(nrow(DT1)/10),]
@@ -111,9 +132,9 @@ rm(list = c("DT2", "DT3"))
 
 # recode
 f <- function(){
-	DT[v1 == 1, v1_name := "first"]
-	DT[v1 %in% c(2,3), v1_name := "second"]
-	DT[v1 %in% c(4,5), v1_name := "third"]
+    DT[v1 == 1, v1_name := "first"]
+    DT[v1 %in% c(2,3), v1_name := "second"]
+    DT[v1 %in% c(4,5), v1_name := "third"]
 }
 
 names <- append(names, "recode")
@@ -196,7 +217,7 @@ out <- append(out, time(feols(v3 ~  v2 + id4 + id5  + as.factor(v1) | id6 + id3,
 # plot
 
 names <- append(names, "plot 1000 points")
-out <- append(out,  time(ggsave("~/statabenchmark/plot.pdf", ggplot(DT1[1:1000], aes(x = v1, y = v2)) +  geom_point())))
+out <- append(out,  time(ggsave(here("output", "plot.pdf"), ggplot(DT1[1:1000], aes(x = v1, y = v2)) +  geom_point())))
 
 # run benchmark
-fwrite(data.table(command = names, result = out), "~/statabenchmark/resultR1e7.csv")
+fwrite(data.table(command = names, result = out), here("output", "resultR1e7.csv"))
