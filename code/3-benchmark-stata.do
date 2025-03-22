@@ -65,16 +65,16 @@ timer clear
 local i = 0
 /* write and read */
 Tic, n(`++i')
-import delimited using "${rootdir}/data/1e7.csv", clear
+import delimited using "${rootdir}/data/1e8.csv", clear
 Toc, n(`i')
 
 Tic, n(`++i')
-save "${rootdir}/data/1e7.dta", replace
+save "${rootdir}/data/1e8.dta", replace
 Toc, n(`i')
 
 drop _all 
 Tic, n(`++i')
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Toc, n(`i')
 
 /* sort  */
@@ -99,20 +99,20 @@ gdistinct id6
 Toc, n(`i')
 
 /* merge */
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Tic, n(`++i')
 fmerge m:1 id1 id3 using "${rootdir}/data/merge_string.dta", keep(master matched) nogen
 Toc, n(`i')
 
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Tic, n(`++i')
 fmerge m:1 id4 id6 using "${rootdir}/data/merge_int.dta", keep(master matched) nogen
 Toc, n(`i')
 
 /* append */
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Tic, n(`++i')
-append using "${rootdir}/data/1e7.dta"
+append using "${rootdir}/data/1e8.dta"
 Toc, n(`i')
 
 /* reshape */
@@ -130,7 +130,7 @@ greshape wide v_, i(id1 id2 id3) j(variable) string
 Toc, n(`i')
 
 /* recode */
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Tic, n(`++i')
 gen v1_name = ""
 replace v1_name = "first" if v1 == 1
@@ -193,14 +193,14 @@ Tic, n(`++i')
 gcollapse (mean) v1 v2 (sum) v3,  by(id1) fast
 Toc, n(`i')
 
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 Tic, n(`++i')
 gcollapse (mean) v1 v2 (sum) v3,  by(id3) fast
 Toc, n(`i')
 
 
 /* regress */
-use "${rootdir}/data/1e7.dta", clear
+use "${rootdir}/data/1e8.dta", clear
 keep if _n <= _N/2
 Tic, n(`++i')
 reg v3 v1 v2 id4 id5
@@ -233,7 +233,7 @@ timer list
 forval j = 1/`i'{
 	replace result = r(t`j') if _n == `j'
 }
-outsheet using "${rootdir}/output/resultStata1e7.csv", replace
+outsheet using "${rootdir}/output/resultStata1e8.csv", replace
 
 
 /* system info */

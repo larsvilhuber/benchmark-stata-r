@@ -7,8 +7,8 @@ library(svglite)
 library(here)
 library(dplyr)
 
-DT = fread(here::here("output", "resultR1e7.csv"))
-DT2 = fread(here::here("output", "resultStata1e7.csv"))
+DT = fread(here::here("output", "resultR1e8.csv"))
+DT2 = fread(here::here("output", "resultStata1e8.csv"))
 setnames(DT, "result", "R")
 DT[, Stata := DT2[["result"]]]
 
@@ -29,7 +29,7 @@ image = ggplot(DT,aes(x=command,y=value, fill = "red", width=0.2)) +
     scale_y_log10(breaks = c(0.1, 1, 10, 100), labels = c("0.1", "1", "10", "100")) +
     # add caption as footnote below the plot
     labs(caption = paste0("Number of processors: ", cores))
-ggsave(here::here("output", "1e7.svg"), image)
-ggsave(here::here("output", "1e7.png"), image)
+ggsave(here::here("output", "1e8.svg"), image)
+ggsave(here::here("output", "1e8.png"), image)
 
 sessionInfo()

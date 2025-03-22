@@ -84,13 +84,13 @@ In write.csv(data.frame(cores = available_cores), file = here("output",  :
 > # write and read
 >  
 > names <- append(names, "open csv")
-> out <- append(out, time(DT <- fread(here("data", "1e7.csv"), data.table = FALSE)))
+> out <- append(out, time(DT <- fread(here("data", "1e8.csv"), data.table = FALSE)))
 > 
 > names <- append(names, "save binary")
-> out <- append(out, time(write.fst(DT, here("data", "1e7.fst"))))
+> out <- append(out, time(write.fst(DT, here("data", "1e8.fst"))))
 > 
 > names <- append(names, "open binary")
-> out <- append(out, time(DT <- read.fst(here("data", "1e7.fst"))))
+> out <- append(out, time(DT <- read.fst(here("data", "1e8.fst"))))
 > 
 > # sort and duplicates  
 > setDT(DT)
@@ -111,7 +111,7 @@ In write.csv(data.frame(cores = available_cores), file = here("output",  :
 > out <- append(out, time(uniqueN(DT, by = c("id6"))))
 > 
 > # merge 
-> DT <- read.fst(here("data", "1e7.fst")) 
+> DT <- read.fst(here("data", "1e8.fst")) 
 > setDT(DT)
 > f <- function(){
 +     DT_merge <- read.fst(here("data", "merge_string.fst"))
@@ -124,7 +124,7 @@ In write.csv(data.frame(cores = available_cores), file = here("output",  :
 > names <- append(names, "merge string")
 > out <- append(out, time(f()))
 > 
-> DT <- read.fst(here("data", "1e7.fst")) 
+> DT <- read.fst(here("data", "1e8.fst")) 
 > setDT(DT)
 > f <- function(){
 +     DT_merge <- read.fst(here("data", "merge_int.fst"))
@@ -145,7 +145,7 @@ In write.csv(data.frame(cores = available_cores), file = here("output",  :
 > out <- append(out, time(rbindlist(list(DT,DT1), fill = TRUE)))
 > 
 > # reshape
-> DT <- read.fst(here("data", "1e7.fst")) 
+> DT <- read.fst(here("data", "1e8.fst")) 
 > setDT(DT)
 > DT1 <- unique(DT, by = c("id1", "id2", "id3"))
 > DT1 <- DT1[1:(nrow(DT1)/10),]
@@ -252,8 +252,8 @@ In melt.data.table(DT1, id.vars = c("id1", "id2", "id3")) :
 Saving 7 x 7 in image
 > 
 > # run benchmark
-> fwrite(data.table(command = names, result = out), here("output", "resultR1e7.csv"))
+> fwrite(data.table(command = names, result = out), here("output", "resultR1e8.csv"))
 > 
 > proc.time()
-   user  system elapsed 
-184.033  13.379  78.985 
+    user   system  elapsed 
+2288.600   88.781  962.246 

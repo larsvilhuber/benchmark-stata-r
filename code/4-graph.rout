@@ -1,0 +1,53 @@
+
+R version 4.4.3 (2025-02-28) -- "Trophy Case"
+Copyright (C) 2025 The R Foundation for Statistical Computing
+Platform: x86_64-suse-linux-gnu
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+- Project '/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r' loaded. [renv 1.1.4]
+[Previously saved workspace restored]
+
+> library(data.table)
+> library(tidyr)
+> library(stringr) 
+> library(ggplot2) 
+> library(scales)
+> library(svglite)
+> library(here)
+here() starts at /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:data.table’:
+
+    between, first, last
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> 
+> DT = fread(here::here("output", "resultR1e8.csv"))
+> DT2 = fread(here::here("output", "resultStata1e8.csv"))
+Error in fread(here::here("output", "resultStata1e8.csv")) : 
+  File '/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r/output/resultStata1e8.csv' does not exist or is non-readable. getwd()=='/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r'
+Calls: fread -> stopf -> raise_condition -> signal
+Execution halted

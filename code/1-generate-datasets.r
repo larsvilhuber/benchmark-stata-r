@@ -10,7 +10,7 @@ if (!dir.exists(here::here("data"))) {
 library(data.table)
 library(readr)
 K <- 20
-N <- 1e7L
+N <- 1e8L
 set.seed(1)
 DT <- data.table(
   id1 = sample(sprintf("id%03d",1:K), N, TRUE),      # few groups (char)
@@ -23,7 +23,7 @@ DT <- data.table(
   v2 =  sample(1e6, N, TRUE),                        # int in range [1,1e6]
   v3 =  sample(round(runif(100,max=100),4), N, TRUE) # numeric e.g. 23.5749
 )
-fwrite(DT, here::here("data","1e7.csv"))
+fwrite(DT, here::here("data","1e8.csv"))
 fwrite(unique(DT[, list(id1, id3)]), here::here("data", "merge_string.csv"))
 fwrite(unique(DT[, list(id4, id6)]), here::here("data", "merge_int.csv"))
 

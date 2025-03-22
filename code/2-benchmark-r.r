@@ -56,13 +56,13 @@ i <- 0
 # write and read
  
 names <- append(names, "open csv")
-out <- append(out, time(DT <- fread(here("data", "1e7.csv"), data.table = FALSE)))
+out <- append(out, time(DT <- fread(here("data", "1e8.csv"), data.table = FALSE)))
 
 names <- append(names, "save binary")
-out <- append(out, time(write.fst(DT, here("data", "1e7.fst"))))
+out <- append(out, time(write.fst(DT, here("data", "1e8.fst"))))
 
 names <- append(names, "open binary")
-out <- append(out, time(DT <- read.fst(here("data", "1e7.fst"))))
+out <- append(out, time(DT <- read.fst(here("data", "1e8.fst"))))
 
 # sort and duplicates  
 setDT(DT)
@@ -83,7 +83,7 @@ names <- append(names, "count distinct ints")
 out <- append(out, time(uniqueN(DT, by = c("id6"))))
 
 # merge 
-DT <- read.fst(here("data", "1e7.fst")) 
+DT <- read.fst(here("data", "1e8.fst")) 
 setDT(DT)
 f <- function(){
     DT_merge <- read.fst(here("data", "merge_string.fst"))
@@ -96,7 +96,7 @@ f <- function(){
 names <- append(names, "merge string")
 out <- append(out, time(f()))
 
-DT <- read.fst(here("data", "1e7.fst")) 
+DT <- read.fst(here("data", "1e8.fst")) 
 setDT(DT)
 f <- function(){
     DT_merge <- read.fst(here("data", "merge_int.fst"))
@@ -117,7 +117,7 @@ DT1 <- copy(DT)
 out <- append(out, time(rbindlist(list(DT,DT1), fill = TRUE)))
 
 # reshape
-DT <- read.fst(here("data", "1e7.fst")) 
+DT <- read.fst(here("data", "1e8.fst")) 
 setDT(DT)
 DT1 <- unique(DT, by = c("id1", "id2", "id3"))
 DT1 <- DT1[1:(nrow(DT1)/10),]
@@ -220,4 +220,4 @@ names <- append(names, "plot 1000 points")
 out <- append(out,  time(ggsave(here("output", "plot.pdf"), ggplot(DT1[1:1000], aes(x = v1, y = v2)) +  geom_point())))
 
 # run benchmark
-fwrite(data.table(command = names, result = out), here("output", "resultR1e7.csv"))
+fwrite(data.table(command = names, result = out), here("output", "resultR1e8.csv"))
