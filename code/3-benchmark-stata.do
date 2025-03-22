@@ -239,3 +239,6 @@ outsheet using "${rootdir}/output/resultStata1e7.csv", replace
 /* system info */
 
 creturn list
+
+about
+

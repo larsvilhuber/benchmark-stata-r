@@ -496,7 +496,7 @@ variable v1_name was str5 now str6
 > `cores')
 (dropped 215 singleton observations)
 
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 1 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 1 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -561,13 +561,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -579,30 +579,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000001.log not found)
+(file /tmp/PARALLEL_336608226/00000001.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:57
+Date           : 22 Mar 2025 - 11:38:01
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000001
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data1.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data1.tmp
 exiting worker thread
 .         }
 
@@ -618,7 +618,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000001.txt not found)
+(file /tmp/PARALLEL_336608226/00000001.txt not found)
 
 .         file write f "`rc'"
 
@@ -628,7 +628,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 2 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 2 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -693,13 +693,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -711,30 +711,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000002.log not found)
+(file /tmp/PARALLEL_336608226/00000002.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:58
+Date           : 22 Mar 2025 - 11:38:01
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000002
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data2.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data2.tmp
 exiting worker thread
 .         }
 
@@ -750,7 +750,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000002.txt not found)
+(file /tmp/PARALLEL_336608226/00000002.txt not found)
 
 .         file write f "`rc'"
 
@@ -760,7 +760,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 3 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 3 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -825,13 +825,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -843,30 +843,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000003.log not found)
+(file /tmp/PARALLEL_336608226/00000003.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:58
+Date           : 22 Mar 2025 - 11:38:02
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000003
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data3.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data3.tmp
 exiting worker thread
 .         }
 
@@ -882,7 +882,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000003.txt not found)
+(file /tmp/PARALLEL_336608226/00000003.txt not found)
 
 .         file write f "`rc'"
 
@@ -892,7 +892,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 4 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 4 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -957,13 +957,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -975,30 +975,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000004.log not found)
+(file /tmp/PARALLEL_336608226/00000004.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:59
+Date           : 22 Mar 2025 - 11:38:02
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000004
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data4.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data4.tmp
 exiting worker thread
 .         }
 
@@ -1014,7 +1014,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000004.txt not found)
+(file /tmp/PARALLEL_336608226/00000004.txt not found)
 
 .         file write f "`rc'"
 
@@ -1024,7 +1024,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 5 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 5 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1089,13 +1089,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1107,30 +1107,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000005.log not found)
+(file /tmp/PARALLEL_336608226/00000005.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:59
+Date           : 22 Mar 2025 - 11:38:03
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000005
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data5.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data5.tmp
 exiting worker thread
 .         }
 
@@ -1146,7 +1146,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000005.txt not found)
+(file /tmp/PARALLEL_336608226/00000005.txt not found)
 
 .         file write f "`rc'"
 
@@ -1156,7 +1156,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 6 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 6 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1221,13 +1221,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1239,30 +1239,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000006.log not found)
+(file /tmp/PARALLEL_336608226/00000006.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:51:59
+Date           : 22 Mar 2025 - 11:38:03
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000006
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data6.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data6.tmp
 exiting worker thread
 .         }
 
@@ -1278,7 +1278,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000006.txt not found)
+(file /tmp/PARALLEL_336608226/00000006.txt not found)
 
 .         file write f "`rc'"
 
@@ -1288,7 +1288,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 7 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 7 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1353,13 +1353,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1371,30 +1371,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000007.log not found)
+(file /tmp/PARALLEL_336608226/00000007.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:00
+Date           : 22 Mar 2025 - 11:38:03
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000007
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data7.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data7.tmp
 exiting worker thread
 .         }
 
@@ -1410,7 +1410,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000007.txt not found)
+(file /tmp/PARALLEL_336608226/00000007.txt not found)
 
 .         file write f "`rc'"
 
@@ -1420,7 +1420,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 8 
+[?1h=. do /tmp/PARALLEL_336608226/parallel_code.do 8 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1485,13 +1485,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "336641463"
+.         loc caller_id "336608226"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_336641463"
+.         global parallel_dir "/tmp/PARALLEL_336608226"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1503,30 +1503,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_336641463/00000008.log not found)
+(file /tmp/PARALLEL_336608226/00000008.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:00
+Date           : 22 Mar 2025 - 11:38:04
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 336641463
+Caller ID      : 336608226
 Task   ID      : 00000008
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_336641463
+ - Parallel    : /tmp/PARALLEL_336608226
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
-Files to load: /tmp/PARALLEL_336641463/data0.tmp
-Files to load: /tmp/PARALLEL_336641463/data8.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336608226")
+Files to load: /tmp/PARALLEL_336608226/data0.tmp
+Files to load: /tmp/PARALLEL_336608226/data8.tmp
 exiting worker thread
 .         }
 
@@ -1542,7 +1542,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_336641463/00000008.txt not found)
+(file /tmp/PARALLEL_336608226/00000008.txt not found)
 
 .         file write f "`rc'"
 
@@ -1598,7 +1598,7 @@ Absorbed degrees of freedom:
 > arallel(`cores')
 (dropped 440 singleton observations)
 
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 1 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 1 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1663,13 +1663,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1681,30 +1681,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000001.log not found)
+(file /tmp/PARALLEL_085704593/00000001.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:12
+Date           : 22 Mar 2025 - 11:38:15
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000001
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data1.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data1.tmp
 exiting worker thread
 .         }
 
@@ -1720,7 +1720,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000001.txt not found)
+(file /tmp/PARALLEL_085704593/00000001.txt not found)
 
 .         file write f "`rc'"
 
@@ -1730,7 +1730,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 2 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 2 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1795,13 +1795,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1813,30 +1813,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000002.log not found)
+(file /tmp/PARALLEL_085704593/00000002.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:16
+Date           : 22 Mar 2025 - 11:38:20
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000002
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data2.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data2.tmp
 exiting worker thread
 .         }
 
@@ -1852,7 +1852,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000002.txt not found)
+(file /tmp/PARALLEL_085704593/00000002.txt not found)
 
 .         file write f "`rc'"
 
@@ -1862,7 +1862,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 3 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 3 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -1927,13 +1927,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -1945,30 +1945,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000003.log not found)
+(file /tmp/PARALLEL_085704593/00000003.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:20
+Date           : 22 Mar 2025 - 11:38:25
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000003
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data3.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data3.tmp
 exiting worker thread
 .         }
 
@@ -1984,7 +1984,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000003.txt not found)
+(file /tmp/PARALLEL_085704593/00000003.txt not found)
 
 .         file write f "`rc'"
 
@@ -1994,7 +1994,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 4 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 4 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -2059,13 +2059,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -2077,30 +2077,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000004.log not found)
+(file /tmp/PARALLEL_085704593/00000004.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:25
+Date           : 22 Mar 2025 - 11:38:30
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000004
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data4.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data4.tmp
 exiting worker thread
 .         }
 
@@ -2116,7 +2116,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000004.txt not found)
+(file /tmp/PARALLEL_085704593/00000004.txt not found)
 
 .         file write f "`rc'"
 
@@ -2126,7 +2126,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 5 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 5 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -2191,13 +2191,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -2209,30 +2209,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000005.log not found)
+(file /tmp/PARALLEL_085704593/00000005.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:29
+Date           : 22 Mar 2025 - 11:38:35
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000005
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data5.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data5.tmp
 exiting worker thread
 .         }
 
@@ -2248,7 +2248,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000005.txt not found)
+(file /tmp/PARALLEL_085704593/00000005.txt not found)
 
 .         file write f "`rc'"
 
@@ -2258,7 +2258,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 6 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 6 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -2323,13 +2323,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -2341,30 +2341,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000006.log not found)
+(file /tmp/PARALLEL_085704593/00000006.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:33
+Date           : 22 Mar 2025 - 11:38:40
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000006
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data6.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data6.tmp
 exiting worker thread
 .         }
 
@@ -2380,7 +2380,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000006.txt not found)
+(file /tmp/PARALLEL_085704593/00000006.txt not found)
 
 .         file write f "`rc'"
 
@@ -2390,7 +2390,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 7 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 7 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -2455,13 +2455,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -2473,30 +2473,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000007.log not found)
+(file /tmp/PARALLEL_085704593/00000007.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:37
+Date           : 22 Mar 2025 - 11:38:45
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000007
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data7.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data7.tmp
 exiting worker thread
 .         }
 
@@ -2512,7 +2512,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000007.txt not found)
+(file /tmp/PARALLEL_085704593/00000007.txt not found)
 
 .         file write f "`rc'"
 
@@ -2522,7 +2522,7 @@ exiting worker thread
 .         * Done!
 .         exit, clear STATA
 [?1l>
-[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 8 
+[?1h=. do /tmp/PARALLEL_085704593/parallel_code.do 8 
 
 . * ===========================================================================
 . * Parallel do-file
@@ -2587,13 +2587,13 @@ command cls is unrecognized
 
 .         sysdir set PLUS "~/ado/plus/"
 
-.         loc caller_id "085737829"
+.         loc caller_id "085704593"
 
 .         global task_id `task_id'
 
 .         global padded_task_id = string(`task_id', "%08.0f")
 
-.         global parallel_dir "/tmp/PARALLEL_085737829"
+.         global parallel_dir "/tmp/PARALLEL_085704593"
 
 .         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
 > gstream.pdf
@@ -2605,30 +2605,30 @@ rng set to mt64s
 .         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
 
 .         log using "`fn'", replace text nomsg
-(file /tmp/PARALLEL_085737829/00000008.log not found)
+(file /tmp/PARALLEL_085704593/00000008.log not found)
 
 . 
 .         ViewInfo `caller_id'
 ----------------------------------------------------------------
-Date           : 21 Mar 2025 - 20:52:42
+Date           : 22 Mar 2025 - 11:38:50
 Stata          : 18.5 MP x64 (build 18 Dec 2024)
 Processors     : 2/24
 System         : Unix  PC (64-bit x86-64)
 Host           : zotique3 (user: vilhuber)
-Caller ID      : 085737829
+Caller ID      : 085704593
 Task   ID      : 00000008
 
 Folders:
  - Temp        : /tmp
- - Parallel    : /tmp/PARALLEL_085737829
+ - Parallel    : /tmp/PARALLEL_085704593
  - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 ----------------------------------------------------------------
 
 . 
 .         cap noi {
-.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
-Files to load: /tmp/PARALLEL_085737829/data0.tmp
-Files to load: /tmp/PARALLEL_085737829/data8.tmp
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085704593")
+Files to load: /tmp/PARALLEL_085704593/data0.tmp
+Files to load: /tmp/PARALLEL_085704593/data8.tmp
 exiting worker thread
 .         }
 
@@ -2644,7 +2644,7 @@ exiting worker thread
 .         loc fn "$parallel_dir/${padded_task_id}.txt"
 
 .         file open f using "`fn'", write text replace
-(file /tmp/PARALLEL_085737829/00000008.txt not found)
+(file /tmp/PARALLEL_085704593/00000008.txt not found)
 
 .         file write f "`rc'"
 
@@ -2717,36 +2717,36 @@ file
 Number of observations (_N) was 0, now 30.
 
 . timer list
-   1:     20.71 /        1 =      20.7140
-   2:      0.36 /        1 =       0.3580
-   3:      0.11 /        1 =       0.1100
-   4:      6.77 /        1 =       6.7670
-   5:      2.75 /        1 =       2.7450
-   6:      2.45 /        1 =       2.4460
-   7:      1.18 /        1 =       1.1750
-   8:      0.33 /        1 =       0.3320
-   9:     28.17 /        1 =      28.1690
-  10:      6.80 /        1 =       6.7970
-  11:      1.14 /        1 =       1.1420
-  12:      1.08 /        1 =       1.0830
-  13:      1.64 /        1 =       1.6440
-  14:      1.89 /        1 =       1.8870
-  15:      0.73 /        1 =       0.7270
-  16:      4.11 /        1 =       4.1080
-  17:      0.79 /        1 =       0.7920
-  18:      1.11 /        1 =       1.1090
-  19:      2.80 /        1 =       2.8020
-  20:      0.82 /        1 =       0.8210
-  21:      2.09 /        1 =       2.0950
-  22:      0.87 /        1 =       0.8690
-  23:      2.12 /        1 =       2.1230
-  24:      1.50 /        1 =       1.4950
-  25:      3.62 /        1 =       3.6190
-  26:      0.62 /        1 =       0.6250
-  27:      0.91 /        1 =       0.9070
-  28:     11.45 /        1 =      11.4500
-  29:     44.46 /        1 =      44.4620
-  30:      0.53 /        1 =       0.5310
+   1:     20.82 /        1 =      20.8150
+   2:      0.36 /        1 =       0.3650
+   3:      0.11 /        1 =       0.1120
+   4:      8.29 /        1 =       8.2850
+   5:      3.83 /        1 =       3.8250
+   6:      3.56 /        1 =       3.5580
+   7:      1.34 /        1 =       1.3420
+   8:      0.53 /        1 =       0.5310
+   9:     29.85 /        1 =      29.8500
+  10:      7.05 /        1 =       7.0490
+  11:      1.19 /        1 =       1.1860
+  12:      1.14 /        1 =       1.1380
+  13:      1.71 /        1 =       1.7100
+  14:      1.93 /        1 =       1.9290
+  15:      0.74 /        1 =       0.7440
+  16:      4.21 /        1 =       4.2140
+  17:      0.81 /        1 =       0.8120
+  18:      1.13 /        1 =       1.1330
+  19:      2.86 /        1 =       2.8590
+  20:      0.83 /        1 =       0.8330
+  21:      2.15 /        1 =       2.1550
+  22:      0.90 /        1 =       0.9030
+  23:      2.17 /        1 =       2.1660
+  24:      1.52 /        1 =       1.5190
+  25:      3.72 /        1 =       3.7180
+  26:      0.63 /        1 =       0.6290
+  27:      0.93 /        1 =       0.9290
+  28:     11.60 /        1 =      11.5990
+  29:     50.25 /        1 =      50.2530
+  30:      0.49 /        1 =       0.4870
 
 . forval j = 1/`i'{
   2.         replace result = r(t`j') if _n == `j'
@@ -2794,8 +2794,8 @@ System values
 -------------
 
     ---------------------------------------------------------------------------
-        c(current_date) = "21 Mar 2025"
-        c(current_time) = "20:52:51"
+        c(current_date) = "22 Mar 2025"
+        c(current_time) = "11:39:00"
            c(rmsg_time) = 0                          (seconds, from set rmsg)
     ---------------------------------------------------------------------------
           c(stata_name) = "StataNow"

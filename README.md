@@ -3,7 +3,10 @@
 > This was forked. It has been adapted.
 
 ## Results
-This page compares the speed of R and Stata for typical data analysis. Instructions are runned on randomly generated datasets of with 10 millions observations. I try to use the fastest command available in each language. In particular, I use [gtools](https://github.com/mcaceresb/stata-gtools) in Stata. I use [data.table](https://github.com/Rdatatable/data.table), [fst](https://github.com/fstpackage/fst), and [fixest](https://github.com/lrberge/fixest/) in R.
+
+Original:
+
+> This page compares the speed of R and Stata for typical data analysis. Instructions are runned on randomly generated datasets of with 10 millions observations. I try to use the fastest command available in each language. In particular, I use [gtools](https://github.com/mcaceresb/stata-gtools) in Stata. I use [data.table](https://github.com/Rdatatable/data.table), [fst](https://github.com/fstpackage/fst), and [fixest](https://github.com/lrberge/fixest/) in R.
 
 
 <img class = "img-responsive"  src="/output/1e7.png" />
@@ -23,11 +26,15 @@ The machine used for this benchmark has a AMD Ryzen 9 3900X 12-Core Processor (h
 
 ### Stata
 
-The Stata version is Stata 18 MP/32 set to use 24 cores, running as a Docker image:
+The Stata version is Stata 18.5 MP/32 set to use 24 cores, running natively on Linux. The Stata session info is:
 
-```
-* Docker version 27.5.1-ce, build 4c9b3b011ae4 
-* stata version 18 (Docker image dataeditors/stata18:2024-04-04)
+````stata
+
+StataNow/MP 18.5 for Unix (Linux 64-bit x86-64)
+Revision 18 Dec 2024
+Copyright 1985-2023 StataCorp LLC
+
+Total usable memory: 31.26 GB
 ```
 
 In particular, we used REGHDFE with the `parallel()` option from  <https://scorreia.com/software/reghdfe/>.
