@@ -17,11 +17,24 @@ The R code in the file [2-benchmark-r.r](code/2-benchmark-r.r):
 The Stata code in the file [3-benchmark-stata.do](code/3-benchmark-stata.do):
 
 
-## Session Info 
+## System Info 
 
 The machine used for this benchmark has a AMD Ryzen 9 3900X 12-Core Processor (hyper-threading enabled) with a SanDisk Ultra II 480GB SSD disk.
 
-The Stata version is Stata 18 MP/32 set to use 24 cores.  The R session info is 
+### Stata
+
+The Stata version is Stata 18 MP/32 set to use 24 cores, running as a Docker image:
+
+```
+* Docker version 27.5.1-ce, build 4c9b3b011ae4 
+* stata version 18 (Docker image dataeditors/stata18:2024-04-04)
+```
+
+In particular, we used REGHDFE with the `parallel()` option from  <https://scorreia.com/software/reghdfe/>.
+
+### R
+
+The R session info is 
 
 ````R
 R version 4.4.3 (2025-02-28)

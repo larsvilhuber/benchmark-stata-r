@@ -1,14 +1,14 @@
 
   ___  ____  ____  ____  ____ ®
- /__    /   ____/   /   ____/      18.0
+ /__    /   ____/   /   ____/      StataNow 18.5
 ___/   /   /___/   /   /___/       MP—Parallel Edition
 
  Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
                                    4905 Lakeway Drive
                                    College Station, Texas 77845 USA
-                                   800-STATA-PC        https://www.stata.com
-                                   979-696-4600        stata@stata.com
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
 
 Stata license: 2-user 32-core network, expiring 27 Apr 2025
 Serial number: 501809316179
@@ -34,89 +34,9 @@ Notes:
 > ssc install ftools
 > *****************************************************************************
 > **********************/
-. include "../config.do"
-
-. /* Template config.do */
-. /* Copy this file to your replication directory if using Stata, e.g.,
->     cp template-config.do 12345/codes/config.do
-> 
->    or similar, and then add
-> 
->    include "config.do"
-> 
->    in the author's main Stata program
-> 
->    */
-. 
-. /* Structure of the code, two scenarios:
->    - Code looks like this (simplified, Scenario A)
->          directory/
->               code/
->                  main.do
->                  01_dosomething.do
->               data/
->                  data.dta
->                  otherdata.dta
->    - Code looks like this (simplified, Scenario B)
->          directory/
->                main.do
->                scripts/
->                    01_dosomething.do
->                 data/
->                    data.dta
->                    otherdata.dta
->  - Code looks like this (simplified, Scenario C - like A, but with an additio
-> nal level of directories)
->          directory/
->            step1/
->                scripts/
->                    main.do
->                    01_dosomething.do
->            step2/
->                scripts/
->                    othermain.do
->                    01_analysis.do
->            data/
->                data.dta
->                otherdata.dta
->     For the variable "scenario" below, choose "A" or "B" (or seldomly "C"). I
-> t defaults to "A".
-> 
->     NOTE: you should always put "config.do" in the same directory as "main.do
-> "
-> */
 . 
 . local scenario "A" 
 
-. * *** Add required packages from SSC to this list ***
-. local ssc_packages "gtools fastreshape reghdfe autorename ftools"
-
-.     // Example:
-.     // local ssc_packages "estout boottest"
-.     // 
-.     // If you have packages that need to be unconditionally installed (the na
-> me of the package differs from the included commands), then list them here.
-.     // examples are moremata, egennmore, blindschemes, etc.
-. local ssc_unconditional ""
-
-. 
-.     // If you need to "net install" packages, go to the very end of this prog
-> ram, and add them there.
-. 
-. /* Authors may provide us with adofiles. The path should be added here, relat
-> ive to the root 
->    of the replication package.
->    For instance, if (after LDI-specific setup) 
->    the replication package is "aearep-1234/123456/Replication package"
->    and the authors provide ado files in "aearep-1234/123456/Replication packa
-> ge/Ado-files"
->    then you would enter "Ado-files" in the local definition below.
-> */
-. 
-. local author_adopath ""
-
-. 
-. 
 . /* This works on all OS when running in batch mode, but may not work in inter
 > active mode */
 . local pwd : pwd                     // This always captures the current direc
@@ -126,7 +46,7 @@ Notes:
 . if "`scenario'" == "A" {             // If in Scenario A, we need to change d
 > irectory first
 .     cd ..
-/project
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 . }
 
 . if "`scenario'" == "C" {             // If in Scenario C, we need to go up tw
@@ -138,325 +58,2759 @@ Notes:
 > otdir
 
 . display in red "Rootdir has been set to: $rootdir"
-Rootdir has been set to: /project
-
-. 
-. 
-. /*===========================================================================
-> =====================================*/
-. /*                            You normally need to make no further changes be
-> low this                             */
-. /*                             unless you need to "net install" packages     
->                                      */
-. 
-. /* convert paths */
-. global rootdir = subinstr("${rootdir}", "\", "/", .)  // Make sure slashes ar
-> e correct
-
-. if "`author_adopath'" != "" {             // The author adopath variable is f
-> illed out
-.     local author_adopath = subinstr("`author_adopath'", "\", "/", .)  // Make
->  sure slashes are correct
-. }
+Rootdir has been set to: /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
 
 . 
 . 
 . 
-. /* we start with all defaults set back to defaults */
-. set_defaults _all
--> set maxvar 5000
--> set matsize 400
--> set niceness 5
--> set min_memory 0
--> set max_memory .
--> set segmentsize 32m
--> set adosize 1000
--> set more on
--> set rmsg off
--> set dp period
--> (linesize left at current value)
--> (pagesize left at current value)
--> set level 95
--> set clevel 95
--> set showbaselevels
--> set showemptycells
--> set showomitted
--> set fvlabel on
--> set fvwrap 1
--> set fvwrapon word
--> set lstretch
--> set cformat
--> set pformat
--> set sformat
--> set coeftabresults on
--> set logtype smcl
--> set logmsg on
--> set collect_style default
--> set collect_label default
--> set table_style table
--> set etable_style etable
--> set dtable_style dtable
--> set collect_warn on
--> set linegap 1
--> set scrollbufsize 200000
--> set reventries 5000
--> set maxdb 50
--> set graphics off
--> set scheme s2color
--> set printcolor automatic
--> set copycolor automatic
--> set checksum off
--> set timeout1 30
--> set timeout2 180
--> set netdebug off
--> set httpproxy off
--> set httpproxyhost ""
--> set httpproxyport 8080
--> set httpproxyauth off
--> set httpproxyuser ""
--> set httpproxypw ""
--> set trace off
--> set tracedepth 32000
--> set traceexpand on
--> set tracesep on
--> set traceindent on
--> set tracenumber off
--> set tracehilite ""
--> set matastrict off
--> set matalnum off
--> set mataoptimize on
--> set matafavor space
--> set matacache 2000
--> set matalibs ""
--> set matamofirst off
--> set locale_ui default
--> set locale_functions default
--> set type float
--> set maxiter default
--> set searchdefault all
--> (seed left at current value)
--> set varabbrev on
-(preferences reset)
+. /* timer helpers */
+. cap program drop Tic
+
+. program define Tic
+  1.         syntax, n(integer)
+  2.         timer on `n'
+  3. end
 
 . 
-. /* now for some specific settings*/
-. set more off
+. cap program drop Toc
 
-. /* turn on timing */
-. set rmsg on
-r; t=0.00 0:09:16
-
-. 
-. cd "`pwd'"                            // Return to where we were before and n
-> ever again use cd
-/project/code
-r; t=0.00 0:09:16
-
-. global logdir "${rootdir}/logs"
-r; t=0.00 0:09:16
-
-. cap mkdir "$logdir"
-r; t=0.00 0:09:16
+. program define Toc
+  1.         syntax, n(integer) 
+  2.         timer off `n'
+  3. end
 
 . 
-. /* check if the author creates a log file. If not, adjust the following code 
-> fragment */
+. /*capture the number of processors */
 . 
-. local c_date = c(current_date)
-r; t=0.00 0:09:16
+. di "Number of processors: " `=c(processors)'
+Number of processors: 24
 
-. local cdate = subinstr("`c_date'", " ", "_", .)
-r; t=0.00 0:09:16
-
-. local c_time = c(current_time)
-r; t=0.00 0:09:16
-
-. local ctime = subinstr("`c_time'", ":", "_", .)
-r; t=0.00 0:09:16
-
-. local ldilog = "$logdir/logfile_`cdate'-`ctime'-`c(username)'.log"
-r; t=0.00 0:09:16
-
-. local systeminfo = "$logdir/system_`cdate'-`ctime'-`c(username)'.log"
-r; t=0.00 0:09:16
+. di "Version of Stata:  `c(edition_real)'"
+Version of Stata:  MP
 
 . 
-. /* global logfile */
-. log using "`ldilog'", name(ldi) replace text
-(file /project/logs/logfile_22_Mar_2025-00_09_16-statauser.log not found)
--------------------------------------------------------------------------------
-      name:  ldi
-       log:  /project/logs/logfile_22_Mar_2025-00_09_16-statauser.log
-  log type:  text
- opened on:  22 Mar 2025, 00:09:16
-r; t=0.00 0:09:16
+. /* read processors from R output CSV, and set local macro */
+. import delimited using "${rootdir}/output/cores.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(1 var, 1 obs)
 
-. 
-. /* capture what system we are running on */
-. 
-. di in red "HOSTNAME: `c(hostname)'"
-HOSTNAME: 64b33ac33fb7
-r; t=0.00 0:09:16
+. local cores = cores[1]
 
-. 
-. /* used only for system info */
-. log using "`systeminfo'", name(system) replace text
-(file /project/logs/system_22_Mar_2025-00_09_16-statauser.log not found)
--------------------------------------------------------------------------------
-      name:  system
-       log:  /project/logs/system_22_Mar_2025-00_09_16-statauser.log
-  log type:  text
- opened on:  22 Mar 2025, 00:09:16
-r; t=0.00 0:09:16
+. di "Number of processors used: " `cores'
+Number of processors used: 24
 
-. 
-. /* It will provide some info about how and when the program was run */
-. 
-. /* install any packages locally */
-. di "=== Redirecting where Stata searches for ado files ==="
-=== Redirecting where Stata searches for ado files ===
-r; t=0.00 0:09:16
-
-. capture mkdir "$rootdir/ado"
-r; t=0.00 0:09:16
-
-. adopath - PERSONAL
-  [1]  (BASE)      "/usr/local/stata/ado/base/"
-  [2]  (SITE)      "/usr/local/ado/"
-  [3]              "."
-  [4]  (PLUS)      "~/ado/plus/"
-  [5]  (OLDPLACE)  "~/ado/"
-r; t=0.00 0:09:16
-
-. adopath - OLDPLACE
-  [1]  (BASE)      "/usr/local/stata/ado/base/"
-  [2]  (SITE)      "/usr/local/ado/"
-  [3]              "."
-  [4]  (PLUS)      "~/ado/plus/"
-r; t=0.00 0:09:16
-
-. adopath - SITE
-  [1]  (BASE)      "/usr/local/stata/ado/base/"
-  [2]              "."
-  [3]  (PLUS)      "~/ado/plus/"
-r; t=0.00 0:09:16
-
-. sysdir set PLUS     "$rootdir/ado/plus"
-r; t=0.00 0:09:16
-
-. sysdir set PERSONAL "$rootdir/ado"       // may be needed for some packages
-r; t=0.00 0:09:16
-
-. sysdir
-   STATA:  /usr/local/stata/
-    BASE:  /usr/local/stata/ado/base/
-    SITE:  /usr/local/ado/
-    PLUS:  /project/ado/plus/
-PERSONAL:  /project/ado/
-OLDPLACE:  ~/ado/
-r; t=0.00 0:09:16
-
-. 
-. /*===========================================================================
-> ===================*/
-. /* If present, add the authors' replication-package specific ado file path   
->                    */
-. /* This is defined above                                                     
->                    */
-. /*===========================================================================
-> ===================*/
-. 
-. if "`author_adopath'" != "" {             // The author adopath variable is f
-> illed out
-.     adopath ++ "$rootdir/`author_adopath'"
-r; t=0.00 0:09:16
-. }
-r; t=0.00 0:09:16
-
-. 
-. /* now let's check what's there */
-. 
-. di "=== Verifying pre-existing ado files - normally, this should be EMPTY upo
-> n first run"
-=== Verifying pre-existing ado files - normally, this should be EMPTY upon firs
-> t run
-r; t=0.00 0:09:16
-
-. adopath
-  [1]  (BASE)      "/usr/local/stata/ado/base/"
-  [2]              "."
-  [3]  (PLUS)      "/project/ado/plus/"
-r; t=0.00 0:09:16
-
-. ado
-
-[1] package gtools from http://fmwww.bc.edu/repec/bocode/g
-      'GTOOLS': module to provide a fast implementation of common group command
-> s
-
-[2] package fastreshape from http://fmwww.bc.edu/repec/bocode/f
-      'FASTRESHAPE': module for efficient implementation of reshape for big dat
-> asets
-
-[3] package reghdfe from http://fmwww.bc.edu/repec/bocode/r
-      'REGHDFE': module to perform linear or instrumental-variable regression a
-> bsorbing any number of high-dimensional fixed effects
-
-[4] package autorename from http://fmwww.bc.edu/repec/bocode/a
-      'AUTORENAME': module to automatically rename variables
-
-[5] package ftools from http://fmwww.bc.edu/repec/bocode/f
-      'FTOOLS': module to provide alternatives to common Stata commands optimiz
-> ed for large datasets
-
-[6] package cli-compat from https://raw.githubusercontent.com/aeadataeditor/cli
-> -compat-stata/master
-      'cli-compat': Commands that provide compatibility with programs written w
-> ith GUI Stata in mind.
-r; t=0.00 0:09:16
-
-. di "=========================="
-==========================
-r; t=0.00 0:09:16
+. clear
 
 . 
 . 
-. /* this is long, so we pause the main log file */
-. log off ldi
-      name:  ldi
-       log:  /project/logs/logfile_22_Mar_2025-00_09_16-statauser.log
-  log type:  text
- paused on:  22 Mar 2025, 00:09:16
--------------------------------------------------------------------------------
-r; t=0.00 0:09:16
+. import delimited using "${rootdir}/data/merge_string.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(2 vars, 6,319,836 obs)
+
+. autorename
+(1 observation deleted)
+
+. save "${rootdir}/data/merge_string.dta", replace
+file
+    /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r/data/merge_string.dta
+    saved
 
 . 
-. di "=== SYSTEM DIAGNOSTICS ==="
-=== SYSTEM DIAGNOSTICS ===
-r; t=0.00 0:09:16
+. import delimited using "${rootdir}/data/merge_int.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(2 vars, 6,320,882 obs)
 
+. save "${rootdir}/data/merge_int.dta", replace
+file /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r/data/merge_int.dta
+    saved
+
+. 
+. /****************************************************************************
+> ***********************
+> 
+> *****************************************************************************
+> **********************/
+. 
+. /* benchmark */
+. set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+. 
+. timer clear
+
+. local i = 0
+
+. /* write and read */
+. Tic, n(`++i')
+
+. import delimited using "${rootdir}/data/1e7.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(9 vars, 10,000,000 obs)
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. save "${rootdir}/data/1e7.dta", replace
+file /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r/data/1e7.dta saved
+
+. Toc, n(`i')
+
+. 
+. drop _all 
+
+. Tic, n(`++i')
+
+. use "${rootdir}/data/1e7.dta", clear
+
+. Toc, n(`i')
+
+. 
+. /* sort  */
+. Tic, n(`++i')
+
+. sort id3 
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. sort id6
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. sort v3
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. gdistinct id3
+
+       |        Observations
+       |      total   distinct
+-------+----------------------
+   id3 |   1.00e+07     500000
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. gdistinct id6
+
+       |        Observations
+       |      total   distinct
+-------+----------------------
+   id6 |   1.00e+07     500000
+
+. Toc, n(`i')
+
+. 
+. /* merge */
+. use "${rootdir}/data/1e7.dta", clear
+
+. Tic, n(`++i')
+
+. fmerge m:1 id1 id3 using "${rootdir}/data/merge_string.dta", keep(master matc
+> hed) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                        10,000,000  
+    -----------------------------------------
+
+. Toc, n(`i')
+
+. 
+. use "${rootdir}/data/1e7.dta", clear
+
+. Tic, n(`++i')
+
+. fmerge m:1 id4 id6 using "${rootdir}/data/merge_int.dta", keep(master matched
+> ) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                        10,000,000  
+    -----------------------------------------
+
+. Toc, n(`i')
+
+. 
+. /* append */
+. use "${rootdir}/data/1e7.dta", clear
+
+. Tic, n(`++i')
+
+. append using "${rootdir}/data/1e7.dta"
+
+. Toc, n(`i')
+
+. 
+. /* reshape */
+. bys id1 id2 id3: keep if _n == 1
+(10,245,721 observations deleted)
+
+. keep if _n < _N/10
+(8,778,852 observations deleted)
+
+. foreach v of varlist id4 id5 id6 v1 v2 v3{
+  2.         rename `v' v_`v'
+  3. }
+
+. Tic, n(`++i')
+
+. greshape long v_, i(id1 id2 id3) j(variable) string
+(note: j = id4 id5 id6 v1 v2 v3)
+(note: cannot preserve variable formats when reshaping long)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                  975,427   ->   5,852,562            
+Number of variables                    9  ->   5                    
+j (6 values)                              ->   variable
+xij variables:
+                   v_id4 v_id5 ... v_v3   ->   v_
+-----------------------------------------------------------------------------
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. greshape wide v_, i(id1 id2 id3) j(variable) string
+Option -string- ignored with greshape wide
+(note: j = id4 id5 id6 v1 v2 v3)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                5,852,562   ->   975,427              
+Number of variables                    5  ->   9                    
+j (6 values)                   variable   ->   (dropped)
+xij variables:
+                                     v_   ->   v_id4 v_id5 ... v_v3
+-----------------------------------------------------------------------------
+
+. Toc, n(`i')
+
+. 
+. /* recode */
+. use "${rootdir}/data/1e7.dta", clear
+
+. Tic, n(`++i')
+
+. gen v1_name = ""
+(10,000,000 missing values generated)
+
+. replace v1_name = "first" if v1 == 1
+variable v1_name was str1 now str5
+(2,001,933 real changes made)
+
+. replace v1_name = "second" if inlist(v1, 2, 3)
+variable v1_name was str5 now str6
+(4,001,833 real changes made)
+
+. replace v1_name = "third" if inlist(v1, 4, 5)
+(3,996,234 real changes made)
+
+. Toc, n(`i')
+
+. drop v1_name
+
+. 
+. /* functions */
+. Tic, n(`++i')
+
+. gquantiles temp = v3, n(10) xtile
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = group(id1 id3)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = group(id4 id6)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. 
+. /* split apply combine */ 
+. Tic, n(`++i')
+
+. gegen temp = sum(v3), by(id1)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = sum(v3), by(id3)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = sum(v3), by(id4)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = sum(v3), by(id6)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. 
+. Tic, n(`++i')
+
+. gegen temp = sd(v3), by(id4)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. Tic, n(`++i')
+
+. gegen temp = sd(v3), by(id6)
+
+. Toc, n(`i')
+
+. drop temp
+
+. 
+. 
+. Tic, n(`++i')
+
+. gcollapse (mean) v1 v2 (sum) v3,  by(id1) fast
+
+. Toc, n(`i')
+
+. 
+. use "${rootdir}/data/1e7.dta", clear
+
+. Tic, n(`++i')
+
+. gcollapse (mean) v1 v2 (sum) v3,  by(id3) fast
+
+. Toc, n(`i')
+
+. 
+. 
+. /* regress */
+. use "${rootdir}/data/1e7.dta", clear
+
+. keep if _n <= _N/2
+(5,000,000 observations deleted)
+
+. Tic, n(`++i')
+
+. reg v3 v1 v2 id4 id5
+
+      Source |       SS           df       MS      Number of obs   = 5,000,000
+-------------+----------------------------------   F(4, 4999995)   =      1.27
+       Model |   4508.7625         4  1127.19062   Prob > F        =    0.2806
+    Residual |  4.4497e+09 4,999,995  889.933584   R-squared       =    0.0000
+-------------+----------------------------------   Adj R-squared   =    0.0000
+       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
+
+------------------------------------------------------------------------------
+          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v1 |  -.0040975   .0094338    -0.43   0.664    -.0225874    .0143925
+          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
+         id4 |   .0046459   .0023132     2.01   0.045      .000112    .0091797
+         id5 |  -.0020263   .0023138    -0.88   0.381    -.0065613    .0025088
+       _cons |    50.7748   .0519062   978.20   0.000     50.67307    50.87653
+------------------------------------------------------------------------------
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. reg v3 i.v1 v2 id4 id5
+
+      Source |       SS           df       MS      Number of obs   = 5,000,000
+-------------+----------------------------------   F(7, 4999992)   =      0.93
+       Model |  5802.81474         7  828.973534   Prob > F        =    0.4804
+    Residual |  4.4497e+09 4,999,992  889.933859   R-squared       =    0.0000
+-------------+----------------------------------   Adj R-squared   =   -0.0000
+       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
+
+------------------------------------------------------------------------------
+          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v1 |
+          2  |   .0121412   .0421855     0.29   0.773    -.0705409    .0948233
+          3  |    .028792   .0421784     0.68   0.495    -.0538761    .1114601
+          4  |   .0152643   .0422062     0.36   0.718    -.0674585     .097987
+          5  |  -.0220314   .0421862    -0.52   0.602    -.1047149     .060652
+             |
+          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
+         id4 |   .0046467   .0023132     2.01   0.045     .0001128    .0091805
+         id5 |  -.0020256   .0023138    -0.88   0.381    -.0065606    .0025095
+       _cons |   50.75566   .0510489   994.26   0.000     50.65561    50.85571
+------------------------------------------------------------------------------
+
+. Toc, n(`i')
+
+. 
+. Tic, n(`++i')
+
+. reghdfe v3 v2 id4 id5 i.v1, a(id6) vce(cluster id6) tolerance(1e-6) parallel(
+> `cores')
+(dropped 215 singleton observations)
+
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 1 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000001.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:57
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000001
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data1.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000001.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 2 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000002.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:58
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000002
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data2.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000002.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 3 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000003.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:58
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000003
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data3.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000003.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 4 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000004.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:59
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000004
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data4.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000004.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 5 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000005.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:59
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000005
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data5.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000005.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 6 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000006.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:51:59
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000006
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data6.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000006.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 7 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000007.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:00
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000007
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data7.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000007.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_336641463/parallel_code.do 8 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "336641463"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_336641463"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_336641463/00000008.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:00
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 336641463
+Task   ID      : 00000008
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_336641463
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_336641463")
+Files to load: /tmp/PARALLEL_336641463/data0.tmp
+Files to load: /tmp/PARALLEL_336641463/data8.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_336641463/00000008.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>(MWFE estimator converged in ?? iterations)
+
+HDFE Linear regression                            Number of obs   =  4,999,785
+Absorbing 1 HDFE group                            F(   7, 499763) =       0.90
+Statistics robust to heteroskedasticity           Prob > F        =     0.5068
+                                                  R-squared       =     0.0998
+                                                  Adj R-squared   =    -0.0002
+                                                  Within R-sq.    =     0.0000
+Number of clusters (id6)     =    499,764         Root MSE        =    29.8347
+
+                              (Std. err. adjusted for 499,764 clusters in id6)
+------------------------------------------------------------------------------
+             |               Robust
+          v3 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v2 |   3.16e-08   4.87e-08     0.65   0.517    -6.39e-08    1.27e-07
+         id4 |   .0046862    .002439     1.92   0.055    -.0000942    .0094667
+         id5 |  -.0028618   .0024391    -1.17   0.241    -.0076424    .0019187
+             |
+          v1 |
+          2  |  -.0025847   .0445088    -0.06   0.954    -.0898206    .0846513
+          3  |   .0138799    .044506     0.31   0.755    -.0733504    .1011102
+          4  |  -.0022388   .0445003    -0.05   0.960     -.089458    .0849803
+          5  |  -.0254372   .0445467    -0.57   0.568    -.1127473     .061873
+             |
+       _cons |   50.76483   .0519623   976.95   0.000     50.66298    50.86667
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+         id6 |    499764      499764           0    *|
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+
+. Toc, n(`i')
+
+. 
+. gegen g = group(id3)
+
+. Tic, n(`++i')
+
+. reghdfe v3 v2 id4 id5 i.v1, absorb(id6 g) vce(cluster id6)  tolerance(1e-6) p
+> arallel(`cores')
+(dropped 440 singleton observations)
+
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 1 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000001.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:12
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000001
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data1.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000001.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 2 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000002.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:16
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000002
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data2.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000002.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 3 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000003.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:20
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000003
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data3.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000003.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 4 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000004.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:25
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000004
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data4.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000004.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 5 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000005.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:29
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000005
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data5.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000005.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 6 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000006.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:33
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000006
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data6.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000006.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 7 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000007.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:37
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000007
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data7.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000007.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>
+[?1h=. do /tmp/PARALLEL_085737829/parallel_code.do 8 
+
+. * ===========================================================================
+. * Parallel do-file
+. * ===========================================================================
+.         cap noi cls
+command cls is unrecognized
+
+.         args task_id
+
+.         clear all
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Programs
+. // --------------------------------------------------------------------------
+. 
+. 
+.         
+. capture program drop ViewInfo
+
+. program define ViewInfo
+  1.         args caller_id
+  2.         loc flavor = cond(c(MP), "MP", cond(c(SE), "SE", c(flavor)))
+  3.         loc column 16
+  4.         di as text "{hline 64}"
+  5.         di as text `"Date      {col `column'}: `c(current_date)' - `c(curr
+> ent_time)'"'
+  6.         di as text `"Stata     {col `column'}: `c(stata_version)' `flavor'
+>  x`c(bit)' (build `c(born_date)')"'
+  7.         di as text `"Processors{col `column'}: `c(processors)'/`c(processo
+> rs_max)'"'
+  8.         di as text `"System    {col `column'}: `c(os)' `c(osdtl)' `c(machi
+> ne_type)'"'
+  9.         di as text `"Host      {col `column'}: `c(hostname)' (user: `c(use
+> rname)')"'
+ 10.         di as text `"Caller ID {col `column'}: `caller_id'"'
+ 11.         di as text `"Task   ID {col `column'}: ${padded_task_id}"'
+ 12.         di as text ""
+ 13.         di as text "Folders:"
+ 14.         di as text `" - Temp     {col `column'}: `c(tmpdir)'"'
+ 15.         di as text `" - Parallel {col `column'}: ${parallel_dir}"'
+ 16.         di as text `" - Working  {col `column'}: `c(pwd)'"'
+ 17.         di as text "{hline 64}"
+ 18. end
+
+. 
+. 
+. // --------------------------------------------------------------------------
+. // Main code
+. // --------------------------------------------------------------------------
+. 
+.         * Setup parallel instance
+.         cap noi set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+
+.         cd /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+/mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+
+.         sysdir set PERSONAL "~/ado/personal/"
+
+.         sysdir set PLUS "~/ado/plus/"
+
+.         loc caller_id "085737829"
+
+.         global task_id `task_id'
+
+.         global padded_task_id = string(`task_id', "%08.0f")
+
+.         global parallel_dir "/tmp/PARALLEL_085737829"
+
+.         set rngstream `=10*`task_id'' // https://www.stata.com/manuals/rsetrn
+> gstream.pdf
+rng set to mt64s
+
+. 
+.         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+> <<<<
+.         loc fn "${parallel_dir}`c(dirsep)'${padded_task_id}.log"
+
+.         log using "`fn'", replace text nomsg
+(file /tmp/PARALLEL_085737829/00000008.log not found)
+
+. 
+.         ViewInfo `caller_id'
+----------------------------------------------------------------
+Date           : 21 Mar 2025 - 20:52:42
+Stata          : 18.5 MP x64 (build 18 Dec 2024)
+Processors     : 2/24
+System         : Unix  PC (64-bit x86-64)
+Host           : zotique3 (user: vilhuber)
+Caller ID      : 085737829
+Task   ID      : 00000008
+
+Folders:
+ - Temp        : /tmp
+ - Parallel    : /tmp/PARALLEL_085737829
+ - Working     : /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r
+----------------------------------------------------------------
+
+. 
+.         cap noi {
+.         reghdfe, worker parallel_path("/tmp/PARALLEL_085737829")
+Files to load: /tmp/PARALLEL_085737829/data0.tmp
+Files to load: /tmp/PARALLEL_085737829/data8.tmp
+exiting worker thread
+.         }
+
+.         loc rc = c(rc)
+
+.         
+.         log close _all
+
+.         * >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+> >>>>
+. 
+.         * Write sentinel file
+.         loc fn "$parallel_dir/${padded_task_id}.txt"
+
+.         file open f using "`fn'", write text replace
+(file /tmp/PARALLEL_085737829/00000008.txt not found)
+
+.         file write f "`rc'"
+
+.         file close _all
+
+. 
+.         * Done!
+.         exit, clear STATA
+[?1l>(MWFE estimator converged in ?? iterations)
+
+HDFE Linear regression                            Number of obs   =  4,999,560
+Absorbing 2 HDFE groups                           F(   7, 499763) =       1.04
+Statistics robust to heteroskedasticity           Prob > F        =     0.4008
+                                                  R-squared       =     0.1999
+                                                  Adj R-squared   =    -0.0000
+                                                  Within R-sq.    =     0.0000
+Number of clusters (id6)     =    499,764         Root MSE        =    29.8321
+
+                              (Std. err. adjusted for 499,764 clusters in id6)
+------------------------------------------------------------------------------
+             |               Robust
+          v3 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v2 |   4.03e-08   5.14e-08     0.79   0.432    -6.04e-08    1.41e-07
+         id4 |   .0050529   .0025737     1.96   0.050     8.56e-06    .0100973
+         id5 |  -.0024992   .0025761    -0.97   0.332    -.0075483      .00255
+             |
+          v1 |
+          2  |    .007267   .0468902     0.15   0.877    -.0846364    .0991704
+          3  |   .0372648   .0469507     0.79   0.427    -.0547571    .1292867
+          4  |   .0043666   .0469363     0.09   0.926    -.0876272    .0963603
+          5  |  -.0264769   .0469703    -0.56   0.573    -.1185372    .0655834
+             |
+       _cons |   50.74505   .0547803   926.34   0.000     50.63769    50.85242
+------------------------------------------------------------------------------
+
+Absorbed degrees of freedom:
+-----------------------------------------------------+
+ Absorbed FE | Categories  - Redundant  = Num. Coefs |
+-------------+---------------------------------------|
+         id6 |    499764      499764           0    *|
+           g |    499748           1      499747     |
+-----------------------------------------------------+
+* = FE nested within cluster; treated as redundant for DoF computation
+
+. Toc, n(`i')
+
+. 
+. /* plot */
+. keep if _n <= 1000
+(4,999,000 observations deleted)
+
+. Tic, n(`++i')
+
+. twoway (scatter v2 v1)
+
+. graph export "${rootdir}/output/plot_stata.pdf", replace
+file
+    /mnt/local/fast_home/vilhuber/tmp/benchmark-stata-r/output/plot_stata.pdf
+    saved as PDF format
+
+. Toc, n(`i')
+
+. 
+. drop _all
+
+. gen result = .
+
+. set obs `i'
+Number of observations (_N) was 0, now 30.
+
+. timer list
+   1:     20.71 /        1 =      20.7140
+   2:      0.36 /        1 =       0.3580
+   3:      0.11 /        1 =       0.1100
+   4:      6.77 /        1 =       6.7670
+   5:      2.75 /        1 =       2.7450
+   6:      2.45 /        1 =       2.4460
+   7:      1.18 /        1 =       1.1750
+   8:      0.33 /        1 =       0.3320
+   9:     28.17 /        1 =      28.1690
+  10:      6.80 /        1 =       6.7970
+  11:      1.14 /        1 =       1.1420
+  12:      1.08 /        1 =       1.0830
+  13:      1.64 /        1 =       1.6440
+  14:      1.89 /        1 =       1.8870
+  15:      0.73 /        1 =       0.7270
+  16:      4.11 /        1 =       4.1080
+  17:      0.79 /        1 =       0.7920
+  18:      1.11 /        1 =       1.1090
+  19:      2.80 /        1 =       2.8020
+  20:      0.82 /        1 =       0.8210
+  21:      2.09 /        1 =       2.0950
+  22:      0.87 /        1 =       0.8690
+  23:      2.12 /        1 =       2.1230
+  24:      1.50 /        1 =       1.4950
+  25:      3.62 /        1 =       3.6190
+  26:      0.62 /        1 =       0.6250
+  27:      0.91 /        1 =       0.9070
+  28:     11.45 /        1 =      11.4500
+  29:     44.46 /        1 =      44.4620
+  30:      0.53 /        1 =       0.5310
+
+. forval j = 1/`i'{
+  2.         replace result = r(t`j') if _n == `j'
+  3. }
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+(1 real change made)
+
+. outsheet using "${rootdir}/output/resultStata1e7.csv", replace
+
+. 
+. 
+. /* system info */
+. 
 . creturn list
 
 System values
 -------------
 
     ---------------------------------------------------------------------------
-        c(current_date) = "22 Mar 2025"
-        c(current_time) = "00:09:16"
+        c(current_date) = "21 Mar 2025"
+        c(current_time) = "20:52:51"
            c(rmsg_time) = 0                          (seconds, from set rmsg)
     ---------------------------------------------------------------------------
-       c(stata_version) = 18
-             c(version) = 18                         (version)
-         c(userversion) = 18                         (version)
+          c(stata_name) = "StataNow"
+       c(stata_version) = 18.5
+             c(version) = 18.5                       (version)
+         c(userversion) = 18.5                       (version)
       c(dyndoc_version) = 2                          (dyndoc)
     ---------------------------------------------------------------------------
-           c(born_date) = "04 Apr 2024"
+           c(born_date) = "18 Dec 2024"
              c(edition) = "BE"
         c(edition_real) = "MP"
                  c(bit) = 64
                   c(SE) = 1
                   c(MP) = 1
-          c(processors) = 24                         (Stata/MP, set processors)
+          c(processors) = 2                          (Stata/MP, set processors)
       c(processors_lic) = 32
      c(processors_mach) = 24
       c(processors_max) = 24
@@ -466,26 +2820,26 @@ System values
     ---------------------------------------------------------------------------
                   c(os) = "Unix"
                c(osdtl) = ""
-            c(hostname) = "64b33ac33fb7"
+            c(hostname) = "zotique3"
         c(machine_type) = "PC (64-bit x86-64)"
            c(byteorder) = "lohi"
-            c(username) = "statauser"
+            c(username) = "vilhuber"
     ---------------------------------------------------------------------------
 
 Directories and paths
 ---------------------
 
     ---------------------------------------------------------------------------
-        c(sysdir_stata) = "/usr/local/stata/"        (sysdir)
-         c(sysdir_base) = "/usr/local/stata/.."      (sysdir)
+        c(sysdir_stata) = "/usr/local/stata18/"      (sysdir)
+         c(sysdir_base) = "/usr/local/stata1.."      (sysdir)
          c(sysdir_site) = "/usr/local/ado/"          (sysdir)
-         c(sysdir_plus) = "/project/ado/plus/"       (sysdir)
-     c(sysdir_personal) = "/project/ado/"            (sysdir)
+         c(sysdir_plus) = "~/ado/plus/"              (sysdir)
+     c(sysdir_personal) = "~/ado/personal/"          (sysdir)
      c(sysdir_oldplace) = "~/ado/"                   (sysdir)
               c(tmpdir) = "/tmp"
     ---------------------------------------------------------------------------
-             c(adopath) = "`"BASE"';`"."';`".."      (adopath)
-                 c(pwd) = "/project/code"            (cd)
+             c(adopath) = "BASE;SITE;.;PERSO.."      (adopath)
+                 c(pwd) = "/mnt/local/fast_h.."      (cd)
               c(dirsep) = "/"
     ---------------------------------------------------------------------------
 
@@ -544,10 +2898,10 @@ Current dataset
 
     ---------------------------------------------------------------------------
                c(frame) = "default"
-                   c(N) = 0
-                   c(k) = 0
-               c(width) = 0
-             c(changed) = 0
+                   c(N) = 30
+                   c(k) = 1
+               c(width) = 4
+             c(changed) = 1
             c(filename) = ""
             c(filedate) = ""
     ---------------------------------------------------------------------------
@@ -556,7 +2910,7 @@ Memory settings
 ---------------
 
     ---------------------------------------------------------------------------
-              c(memory) = 33554432
+              c(memory) = 369098752
               c(maxvar) = 5000                       (set maxvar)
             c(niceness) = 5                          (set niceness)
           c(min_memory) = 0                          (set min_memory)
@@ -571,7 +2925,7 @@ Output settings
 
     ---------------------------------------------------------------------------
                 c(more) = "off"                      (set more)
-                c(rmsg) = "on"                       (set rmsg)
+                c(rmsg) = "off"                      (set rmsg)
                   c(dp) = "period"                   (set dp)
             c(linesize) = 79                         (set linesize)
             c(pagesize) = 23                         (set pagesize)
@@ -620,9 +2974,9 @@ Graphics settings
 -----------------
 
     ---------------------------------------------------------------------------
-            c(graphics) = "off"                      (set graphics)
-              c(scheme) = "s2color"                  (set scheme)
-          c(printcolor) = "automatic"                (set printcolor)
+            c(graphics) = "on"                       (set graphics)
+              c(scheme) = "stcolor"                  (set scheme)
+          c(printcolor) = "asis"                     (set printcolor)
        c(min_graphsize) = 1                          (region_options)
        c(max_graphsize) = 100                        (region_options)
     ---------------------------------------------------------------------------
@@ -633,7 +2987,7 @@ Network settings
     ---------------------------------------------------------------------------
            c(httpproxy) = "off"                      (set httpproxy)
        c(httpproxyhost) = ""                         (set httpproxyhost)
-       c(httpproxyport) = 8080                       (set httpproxyport)
+       c(httpproxyport) = 80                         (set httpproxyport)
     ---------------------------------------------------------------------------
        c(httpproxyauth) = "off"                      (set httpproxyauth)
        c(httpproxyuser) = ""                         (set httpproxyuser)
@@ -657,12 +3011,12 @@ Mata settings
 -------------
 
     ---------------------------------------------------------------------------
-          c(matastrict) = "off"                      (set matastrict)
+          c(matastrict) = "on"                       (set matastrict)
             c(matalnum) = "off"                      (set matalnum)
         c(mataoptimize) = "on"                       (set mataoptimize)
            c(matafavor) = "space"                    (set matafavor)
            c(matacache) = 2000                       (set matacache)
-            c(matalibs) = "lmatabase;lmataad.."      (set matalibs)
+            c(matalibs) = "lmatabase;lmatami.."      (set matalibs)
          c(matamofirst) = "off"                      (set matamofirst)
         c(matasolvetol) = .                          (set matasolvetol)
     ---------------------------------------------------------------------------
@@ -672,7 +3026,7 @@ Java settings
 
     ---------------------------------------------------------------------------
         c(java_heapmax) = "4096m"                    (set java_heapmax)
-           c(java_home) = "/usr/local/stata/.."      (set java_home)
+           c(java_home) = "/usr/local/stata1.."      (set java_home)
     ---------------------------------------------------------------------------
 
 LAPACK settings
@@ -713,7 +3067,7 @@ RNG settings
     ---------------------------------------------------------------------------
                  c(rng) = "default"                  (set rng)
          c(rng_current) = "mt64"
-            c(rngstate) = "XAA00000000000000.."      (set rngstate)
+            c(rngstate) = "XAA3b8ba9cd046ba5.."      (set rngstate)
        c(rngseed_mt64s) = 123456789
            c(rngstream) = 1                          (set rngstream)
     ---------------------------------------------------------------------------
@@ -724,7 +3078,7 @@ sort settings
     ---------------------------------------------------------------------------
           c(sortmethod) = "default"                  (set sortmethod)
         c(sort_current) = "fsort"
-        c(sortrngstate) = "1001XZA112210f4b1.."      (set sortrngstate)
+        c(sortrngstate) = "1296919897XZA1122.."      (set sortrngstate)
     ---------------------------------------------------------------------------
 
 Unicode settings
@@ -769,1123 +3123,6 @@ Other system values
                c(obs_t) = "byte"
                   c(rc) = 0                          (capture)
     ---------------------------------------------------------------------------
-r; t=0.00 0:09:16
-
-. query
-
--------------------------------------------------------------------------------
-    Memory settings
-      set maxvar           5000       2048-120000; max. vars allowed
-      set niceness         5          0-10
-      set min_memory       0          0-1600g
-      set max_memory       .          32m-1600g or .
-      set segmentsize      32m        1m-32g
-      set adosize          1000       kilobytes
-      set max_preservemem  1g         0-1600g
--------------------------------------------------------------------------------
-    Output settings
-      set more             off
-      set rmsg             on
-      set dp               period     may be period or comma
-      set linesize         79         characters
-      set pagesize         23         lines
-      -------------------------------------------------------------------------
-      set iterlog          on
-      -------------------------------------------------------------------------
-      set level            95         percent confidence intervals
-      set clevel           95         percent credible intervals
-      -------------------------------------------------------------------------
-      set showbaselevels              may be empty, off, on, or all
-      set showemptycells              may be empty, off, or on
-      set showomitted                 may be empty, off, or on
-      set fvlabel          on
-      set fvwrap           1          
-      set fvwrapon         word       may be word or width
-      -------------------------------------------------------------------------
-      set lstretch                    may be empty, off, or on
-      -------------------------------------------------------------------------
-      set cformat                     may be empty or a numerical format
-      set pformat                     may be empty or a numerical format
-      set sformat                     may be empty or a numerical format
-      -------------------------------------------------------------------------
-      set coeftabresults   on
-      set dots             on
-      -------------------------------------------------------------------------
-      set logtype          smcl       may be smcl or text
-      set logmsg           on
-      -------------------------------------------------------------------------
-      set collect_label    default
-      set collect_style    default
-      set table_style      table
-      set etable_style     etable
-      set dtable_style     dtable
-      set collect_warn     on
--------------------------------------------------------------------------------
-    Interface settings
-      set linegap                     (not relevant)
-      set scrollbufsize               (not relevant)
-      -------------------------------------------------------------------------
-      set maxdb                       (not relevant)
--------------------------------------------------------------------------------
-    Graphics settings
-      set graphics         off
-      set scheme           s2color
-      set printcolor       automatic  may be automatic, asis, gs1, gs2, gs3
--------------------------------------------------------------------------------
-    Network settings
-      set httpproxy        off
-      set httpproxyhost    
-      set httpproxyport    8080
-      -------------------------------------------------------------------------
-      set httpproxyauth    off
-      set httpproxyuser    
-      set httpproxypw      
--------------------------------------------------------------------------------
-    Update settings
-      set update_query                (not relevant)
-      set update_interval             (not relevant)
-      set update_prompt               (not relevant)
--------------------------------------------------------------------------------
-    Trace (programming debugging) settings
-      set trace            off
-      set tracedepth       32000
-      set traceexpand      on
-      set tracesep         on
-      set traceindent      on
-      set tracenumber      off
-      set tracehilite      
--------------------------------------------------------------------------------
-    Mata settings
-      set matastrict       off
-      set matalnum         off
-      set mataoptimize     on
-      set matafavor        space      may be space or speed
-      set matacache        2000       kilobytes
-      set matalibs         lmatabase;lmataado;lmatabma;lmatacollect;lmatadata;l
-> mataerm;lmatafc;lmatagsem;lmatahetdid;lmataivqreg;lmatajm;lmatalasso;lmatamcm
-> c;lmatameta;lmatami;lmatamixlog;lmatanumlib;lmataopt;lmatapath;lmatapostest;l
-> matapss;lmatasem;lmatasp;lmatasvy;lmatatab;lmatats
-      set matamofirst      off
-      set matasolvetol     .          may be . or any double-precision number
--------------------------------------------------------------------------------
-    Java settings
-      set java_heapmax     4096m
-      set java_home        /usr/local/stata/utilities/java/linux-x64/zulu-jdk17
-> .0.10/
--------------------------------------------------------------------------------
-    LAPACK settings
-      set lapack_mkl       on
-      set lapack_mkl_cnr   default
--------------------------------------------------------------------------------
-    putdocx settings
-      set docx_hardbreak   off
-      set docx_paramode    off
-      set docx_maxtable    500        1-10000
--------------------------------------------------------------------------------
-    putpdf settings
-      set pdf_maxtable     500        1-10000
--------------------------------------------------------------------------------
-    Python settings
-      set python_exec      
-      set python_userpath  
--------------------------------------------------------------------------------
-    RNG settings
-      set rng              default    may be default, mt64, mt64s, or kiss32
-      set rngstate         XAA00000000000000000000000000000000000000...
-      set rngstream        1          rng stream number
--------------------------------------------------------------------------------
-    sort settings
-      set sortmethod       default    may be default, fsort, or qsort
-                           fsort      current sort method
-      set sortrngstate     1001XZA112210f4b16c1cb10507a1f38cb440c400...
--------------------------------------------------------------------------------
-    Unicode settings
-      set locale_ui        en_US
-      set locale_functions en_US
--------------------------------------------------------------------------------
-    Other settings
-      set type             float      may be float or double
-      set maxiter          300        max iterations for estimation commands
-      set searchdefault    all        may be local, net, or all
-      set varabbrev        on
-      set emptycells       keep       may be keep or drop
-      set fvtrack          term       may be term or factor
-      set fvbase           on
-      set processors       24         1-24
-      set kmp_blocktime    200        time duration in milliseconds
-      set odbcmgr          iodbc      may be iodbc or unixodbc
-      set odbcdriver       unicode    may be unicode, ansi, or default
-      set fredkey          
-      set collect_double   on
-      set dtascomplevel    1          dtas default compression level; 0-9
-      set reshape_favor    default    may be default, memory, or speed
--------------------------------------------------------------------------------
-r; t=0.00 0:09:16
-
-. di "=========================="
-==========================
-r; t=0.00 0:09:16
-
-. 
-. /* we're done collecting system info */
-. log close system
-      name:  system
-       log:  /project/logs/system_22_Mar_2025-00_09_16-statauser.log
-  log type:  text
- closed on:  22 Mar 2025, 00:09:16
--------------------------------------------------------------------------------
-r; t=0.00 0:09:16
-
-. log on ldi
--------------------------------------------------------------------------------
-      name:  ldi
-       log:  /project/logs/logfile_22_Mar_2025-00_09_16-statauser.log
-  log type:  text
-resumed on:  22 Mar 2025, 00:09:16
-r; t=0.00 0:09:16
-
-. 
-. 
-. /* add packages to the macro */
-.     
-.     display in red "============ Installing packages/commands from SSC ======
-> ======="
-============ Installing packages/commands from SSC =============
-r; t=0.00 0:09:16
-
-.     display in red "== Packages: `ssc_packages'"
-== Packages: gtools fastreshape reghdfe autorename ftools
-r; t=0.00 0:09:16
-
-.     if !missing("`ssc_packages'") {
-.         foreach pkg in `ssc_packages' {
-  2.             capture which `pkg'
-  3.             if _rc == 111 {                 
-  4.                dis "Installing `pkg'"
-  5.                 ssc install `pkg', replace
-  6.             }
-  7.             which `pkg'
-  8.         }
-/project/ado/plus/g/gtools.ado
-*! version 1.10.1 05Dec2022 Mauricio Caceres Bravo, mauricio.caceres.bravo@gmai
-> l.com
-*! Program for managing the gtools package installation
-/project/ado/plus/f/fastreshape.ado
-/project/ado/plus/r/reghdfe.ado
-*! version 6.12.3 08aug2023
-/project/ado/plus/a/autorename.ado
-*! autorename 1.0.1 8jul2009 by Julian Reif
-/project/ado/plus/f/ftools.ado
-*! version 2.49.1 08aug2023
-r; t=0.00 0:09:16
-.     }
-r; t=0.00 0:09:16
-
-. 
-. /* add unconditionally installed packages */
-.     display in red "=============== Unconditionally installed packages from S
-> SC ==============="
-=============== Unconditionally installed packages from SSC ===============
-r; t=0.00 0:09:16
-
-.     display in red "== Packages: `ssc_unconditional'"
-== Packages: 
-r; t=0.00 0:09:16
-
-.     if !missing("`ssc_unconditional'") {
-.         foreach pkg in `ssc_unconditional' {
-  2.             dis "Installing `pkg'"
-  3.             ssc install `pkg', replace
-  4.         }
-r; t=0.00 0:09:16
-.     }
-r; t=0.00 0:09:16
-
-. 
-. /*===========================================================================
-> ===================*/
-. /* If you need to "net install" packages, add lines to this section          
->                    */
-.     * Install packages using net
-.     * net install grc1leg, from("http://www.stata.com/users/vwiggins/")
-. 
-. /*===========================================================================
-> ===================*/
-. /* yet other programs have no install capability, and may need to be copied *
-> /
-. /*===========================================================================
-> ===================*/
-. 
-. // e.g.
-. //  copy (URL) (name_of_file.ado)
-. // example:
-. // copy http://www.sacarny.com/wp-content/uploads/2015/08/ebayes.ado ebayes.a
-> do
-. 
-. 
-. /*===========================================================================
-> ===================*/
-. /* This toolbox allows us to run code that still contains interactive command
-> s (which it should not) */
-. /*===========================================================================
-> ===================*/
-. 
-. net install cli-compat, all replace from("https://raw.githubusercontent.com/a
-> eadataeditor/cli-compat-stata/master")
-checking cli-compat consistency and verifying not already installed...
-all files already exist and are up to date.
-r; t=0.58 0:09:17
-
-. 
-. /*-------------- Sometimes, you may get the dreaded esttab error about paths 
-> -------------------*/
-. /* in that case, uncomment the following line, and overwrite the estout packa
-> ge with the newer one */
-. 
-. // net install estout, replace from(https://raw.githubusercontent.com/benjann
-> /estout/master/)
-. 
-. /*===========================================================================
-> ===================*/
-. /* after installing all packages, it may be necessary to issue the mata mlib 
-> index command */
-. /* This should always be the LAST command after installing all packages      
->               */
-. /*===========================================================================
-> ===================*/
-. 
-.         mata: mata mlib index
-.mlib libraries to be searched are now
-    lmatabase;lmataado;lmatabma;lmatacollect;lmatadata;lmataerm;lmatafc;lmatags
-> em;lmatahetdid;lmataivqreg;lmatajm;lmatalasso;lmatamcmc;lmatameta;lmatami;lma
-> tamixlog;lmatanumlib;lmataopt;lmatapath;lmatapostest;lmatapss;lmatasem;lmatas
-> p;lmatasvy;lmatatab;lmatats;lgtools
-r; t=0.00 0:09:17
-
-. 
-. /*===========================================================================
-> ===================*/
-. /* This is specific to AEA replication environment. May not be needed if no c
-> onfidential data   */
-. /* are used in the reproducibility check.                                    
->                    */
-. /* Replicator should check the JIRA field "Working location of restricted dat
-> a" for right path  */
-. /*===========================================================================
-> ===================*/
-. 
-. global sdrive ""
-r; t=0.00 0:09:17
-
-. 
-. 
-. /*===========================================================================
-> ===================*/
-. /* After all the setup work, let's check again what's installed in the ado di
-> rectories          */
-. /*===========================================================================
-> ===================*/
-. 
-. 
-. di "=== Verifying ado files after all install steps"
-=== Verifying ado files after all install steps
-r; t=0.00 0:09:17
-
-. adopath
-  [1]  (BASE)      "/usr/local/stata/ado/base/"
-  [2]              "."
-  [3]  (PLUS)      "/project/ado/plus/"
-r; t=0.00 0:09:17
-
-. ado
-
-[1] package gtools from http://fmwww.bc.edu/repec/bocode/g
-      'GTOOLS': module to provide a fast implementation of common group command
-> s
-
-[2] package fastreshape from http://fmwww.bc.edu/repec/bocode/f
-      'FASTRESHAPE': module for efficient implementation of reshape for big dat
-> asets
-
-[3] package reghdfe from http://fmwww.bc.edu/repec/bocode/r
-      'REGHDFE': module to perform linear or instrumental-variable regression a
-> bsorbing any number of high-dimensional fixed effects
-
-[4] package autorename from http://fmwww.bc.edu/repec/bocode/a
-      'AUTORENAME': module to automatically rename variables
-
-[5] package ftools from http://fmwww.bc.edu/repec/bocode/f
-      'FTOOLS': module to provide alternatives to common Stata commands optimiz
-> ed for large datasets
-
-[6] package cli-compat from https://raw.githubusercontent.com/aeadataeditor/cli
-> -compat-stata/master
-      'cli-compat': Commands that provide compatibility with programs written w
-> ith GUI Stata in mind.
-r; t=0.00 0:09:17
-
-. di "=========================="
-==========================
-r; t=0.00 0:09:17
-
-. 
-. 
-. 
-. di "========================================= END SETUP + DIAGNOSTICS =======
-> ============================="
-========================================= END SETUP + DIAGNOSTICS =============
-> =======================
-r; t=0.00 0:09:17
-
-. r; t=0.00 0:09:17
-
-. /* timer helpers */
-. cap program drop Tic
-r; t=0.00 0:09:17
-
-. program define Tic
-  1.         syntax, n(integer)
-  2.         timer on `n'
-  3. end
-r; t=0.00 0:09:17
-
-. 
-. cap program drop Toc
-r; t=0.00 0:09:17
-
-. program define Toc
-  1.         syntax, n(integer) 
-  2.         timer off `n'
-  3. end
-r; t=0.00 0:09:17
-
-. 
-. /*capture the number of processors */
-. 
-. di "Number of processors: " `=c(processors)'
-Number of processors: 24
-r; t=0.00 0:09:17
-
-. di "Version of Stata:  `c(edition_real)'"
-Version of Stata:  MP
-r; t=0.00 0:09:17
-
-. 
-. /* read processors from R output CSV, and set local macro */
-. import delimited using "${rootdir}/output/cores.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(1 var, 1 obs)
-r; t=0.14 0:09:17
-
-. local cores = cores[1]
-r; t=0.00 0:09:17
-
-. di "Number of processors used: " `cores'
-Number of processors used: 24
-r; t=0.00 0:09:17
-
-. clear
-r; t=0.00 0:09:17
-
-. 
-. 
-. import delimited using "${rootdir}/data/merge_string.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(2 vars, 6,319,836 obs)
-r; t=4.33 0:09:21
-
-. autorename
-(1 observation deleted)
-r; t=21.36 0:09:42
-
-. save "${rootdir}/data/merge_string.dta", replace
-(file /project/data/merge_string.dta not found)
-file /project/data/merge_string.dta saved
-r; t=0.14 0:09:42
-
-. 
-. import delimited using "${rootdir}/data/merge_int.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(2 vars, 6,320,882 obs)
-r; t=3.70 0:09:46
-
-. save "${rootdir}/data/merge_int.dta", replace
-(file /project/data/merge_int.dta not found)
-file /project/data/merge_int.dta saved
-r; t=0.05 0:09:46
-
-. 
-. /****************************************************************************
-> ***********************
-> 
-> *****************************************************************************
-> **********************/
-. 
-. /* benchmark */
-. set processors 2
-    The maximum number of processors or cores being used is changed from 24
-    to 2.  It can be set to any number between 1 and 24
-r; t=0.00 0:09:46
-
-. 
-. timer clear
-r; t=0.00 0:09:46
-
-. local i = 0
-r; t=0.00 0:09:46
-
-. /* write and read */
-. Tic, n(`++i')
-r; t=0.00 0:09:46
-
-. import delimited using "${rootdir}/data/1e7.csv", clear
-(encoding automatically selected: ISO-8859-1)
-(9 vars, 10,000,000 obs)
-r; t=18.61 0:10:05
-
-. Toc, n(`i')
-r; t=0.00 0:10:05
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:10:05
-
-. save "${rootdir}/data/1e7.dta", replace
-(file /project/data/1e7.dta not found)
-file /project/data/1e7.dta saved
-r; t=0.30 0:10:05
-
-. Toc, n(`i')
-r; t=0.00 0:10:05
-
-. 
-. drop _all 
-r; t=0.00 0:10:05
-
-. Tic, n(`++i')
-r; t=0.00 0:10:05
-
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.09 0:10:05
-
-. Toc, n(`i')
-r; t=0.00 0:10:05
-
-. 
-. /* sort  */
-. Tic, n(`++i')
-r; t=0.00 0:10:05
-
-. sort id3 
-r; t=7.33 0:10:13
-
-. Toc, n(`i')
-r; t=0.00 0:10:13
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:10:13
-
-. sort id6
-r; t=2.96 0:10:16
-
-. Toc, n(`i')
-r; t=0.00 0:10:16
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:10:16
-
-. sort v3
-r; t=2.67 0:10:18
-
-. Toc, n(`i')
-r; t=0.00 0:10:18
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:10:18
-
-. gdistinct id3
-
-       |        Observations
-       |      total   distinct
--------+----------------------
-   id3 |   1.00e+07     500000
-r; t=1.35 0:10:20
-
-. Toc, n(`i')
-r; t=0.00 0:10:20
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:10:20
-
-. gdistinct id6
-
-       |        Observations
-       |      total   distinct
--------+----------------------
-   id6 |   1.00e+07     500000
-r; t=0.50 0:10:20
-
-. Toc, n(`i')
-r; t=0.00 0:10:20
-
-. 
-. /* merge */
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.11 0:10:20
-
-. Tic, n(`++i')
-r; t=0.00 0:10:20
-
-. fmerge m:1 id1 id3 using "${rootdir}/data/merge_string.dta", keep(master matc
-> hed) nogen
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                        10,000,000  
-    -----------------------------------------
-r; t=29.37 0:10:50
-
-. Toc, n(`i')
-r; t=0.00 0:10:50
-
-. 
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.09 0:10:50
-
-. Tic, n(`++i')
-r; t=0.00 0:10:50
-
-. fmerge m:1 id4 id6 using "${rootdir}/data/merge_int.dta", keep(master matched
-> ) nogen
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                        10,000,000  
-    -----------------------------------------
-r; t=6.92 0:10:57
-
-. Toc, n(`i')
-r; t=0.00 0:10:57
-
-. 
-. /* append */
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.10 0:10:57
-
-. Tic, n(`++i')
-r; t=0.00 0:10:57
-
-. append using "${rootdir}/data/1e7.dta"
-r; t=1.14 0:10:58
-
-. Toc, n(`i')
-r; t=0.00 0:10:58
-
-. 
-. /* reshape */
-. bys id1 id2 id3: keep if _n == 1
-(10,245,721 observations deleted)
-r; t=36.71 0:11:34
-
-. keep if _n < _N/10
-(8,778,852 observations deleted)
-r; t=0.27 0:11:35
-
-. foreach v of varlist id4 id5 id6 v1 v2 v3{
-  2.         rename `v' v_`v'
-  3. }
-r; t=0.01 0:11:35
-
-. Tic, n(`++i')
-r; t=0.00 0:11:35
-
-. greshape long v_, i(id1 id2 id3) j(variable) string
-(note: j = id4 id5 id6 v1 v2 v3)
-(note: cannot preserve variable formats when reshaping long)
-
-Data                               wide   ->   long
------------------------------------------------------------------------------
-Number of obs.                  975,427   ->   5,852,562            
-Number of variables                    9  ->   5                    
-j (6 values)                              ->   variable
-xij variables:
-                   v_id4 v_id5 ... v_v3   ->   v_
------------------------------------------------------------------------------
-r; t=1.12 0:11:36
-
-. Toc, n(`i')
-r; t=0.00 0:11:36
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:36
-
-. greshape wide v_, i(id1 id2 id3) j(variable) string
-Option -string- ignored with greshape wide
-(note: j = id4 id5 id6 v1 v2 v3)
-
-Data                               long   ->   wide
------------------------------------------------------------------------------
-Number of obs.                5,852,562   ->   975,427              
-Number of variables                    5  ->   9                    
-j (6 values)                   variable   ->   (dropped)
-xij variables:
-                                     v_   ->   v_id4 v_id5 ... v_v3
------------------------------------------------------------------------------
-r; t=1.69 0:11:38
-
-. Toc, n(`i')
-r; t=0.00 0:11:38
-
-. 
-. /* recode */
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.11 0:11:38
-
-. Tic, n(`++i')
-r; t=0.00 0:11:38
-
-. gen v1_name = ""
-(10,000,000 missing values generated)
-r; t=0.18 0:11:38
-
-. replace v1_name = "first" if v1 == 1
-variable v1_name was str1 now str5
-(2,001,933 real changes made)
-r; t=0.57 0:11:38
-
-. replace v1_name = "second" if inlist(v1, 2, 3)
-variable v1_name was str5 now str6
-(4,001,833 real changes made)
-r; t=0.71 0:11:39
-
-. replace v1_name = "third" if inlist(v1, 4, 5)
-(3,996,234 real changes made)
-r; t=0.38 0:11:40
-
-. Toc, n(`i')
-r; t=0.00 0:11:40
-
-. drop v1_name
-r; t=0.00 0:11:40
-
-. 
-. /* functions */
-. Tic, n(`++i')
-r; t=0.00 0:11:40
-
-. gquantiles temp = v3, n(10) xtile
-r; t=0.73 0:11:40
-
-. Toc, n(`i')
-r; t=0.00 0:11:40
-
-. drop temp
-r; t=0.00 0:11:40
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:40
-
-. gegen temp = group(id1 id3)
-r; t=4.22 0:11:44
-
-. Toc, n(`i')
-r; t=0.00 0:11:44
-
-. drop temp
-r; t=0.00 0:11:44
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:44
-
-. gegen temp = group(id4 id6)
-r; t=0.81 0:11:45
-
-. Toc, n(`i')
-r; t=0.00 0:11:45
-
-. drop temp
-r; t=0.00 0:11:45
-
-. 
-. 
-. /* split apply combine */ 
-. Tic, n(`++i')
-r; t=0.00 0:11:45
-
-. gegen temp = sum(v3), by(id1)
-r; t=1.15 0:11:46
-
-. Toc, n(`i')
-r; t=0.00 0:11:46
-
-. drop temp
-r; t=0.00 0:11:46
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:46
-
-. gegen temp = sum(v3), by(id3)
-r; t=2.81 0:11:49
-
-. Toc, n(`i')
-r; t=0.00 0:11:49
-
-. drop temp
-r; t=0.00 0:11:49
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:49
-
-. gegen temp = sum(v3), by(id4)
-r; t=0.82 0:11:50
-
-. Toc, n(`i')
-r; t=0.00 0:11:50
-
-. drop temp
-r; t=0.00 0:11:50
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:50
-
-. gegen temp = sum(v3), by(id6)
-r; t=2.10 0:11:52
-
-. Toc, n(`i')
-r; t=0.00 0:11:52
-
-. drop temp
-r; t=0.00 0:11:52
-
-. 
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:52
-
-. gegen temp = sd(v3), by(id4)
-r; t=0.87 0:11:53
-
-. Toc, n(`i')
-r; t=0.00 0:11:53
-
-. drop temp
-r; t=0.00 0:11:53
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:53
-
-. gegen temp = sd(v3), by(id6)
-r; t=2.11 0:11:55
-
-. Toc, n(`i')
-r; t=0.00 0:11:55
-
-. drop temp
-r; t=0.00 0:11:55
-
-. 
-. 
-. Tic, n(`++i')
-r; t=0.00 0:11:55
-
-. gcollapse (mean) v1 v2 (sum) v3,  by(id1) fast
-r; t=1.50 0:11:57
-
-. Toc, n(`i')
-r; t=0.00 0:11:57
-
-. 
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.11 0:11:57
-
-. Tic, n(`++i')
-r; t=0.00 0:11:57
-
-. gcollapse (mean) v1 v2 (sum) v3,  by(id3) fast
-r; t=3.63 0:12:00
-
-. Toc, n(`i')
-r; t=0.00 0:12:00
-
-. 
-. 
-. /* regress */
-. use "${rootdir}/data/1e7.dta", clear
-r; t=0.12 0:12:01
-
-. keep if _n <= _N/2
-(5,000,000 observations deleted)
-r; t=0.27 0:12:01
-
-. Tic, n(`++i')
-r; t=0.00 0:12:01
-
-. reg v3 v1 v2 id4 id5
-
-      Source |       SS           df       MS      Number of obs   = 5,000,000
--------------+----------------------------------   F(4, 4999995)   =      1.27
-       Model |   4508.7625         4  1127.19062   Prob > F        =    0.2806
-    Residual |  4.4497e+09 4,999,995  889.933584   R-squared       =    0.0000
--------------+----------------------------------   Adj R-squared   =    0.0000
-       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
-
-------------------------------------------------------------------------------
-          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-          v1 |  -.0040975   .0094338    -0.43   0.664    -.0225874    .0143925
-          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
-         id4 |   .0046459   .0023132     2.01   0.045      .000112    .0091797
-         id5 |  -.0020263   .0023138    -0.88   0.381    -.0065613    .0025088
-       _cons |    50.7748   .0519062   978.20   0.000     50.67307    50.87653
-------------------------------------------------------------------------------
-r; t=0.67 0:12:01
-
-. Toc, n(`i')
-r; t=0.00 0:12:01
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:12:01
-
-. reg v3 i.v1 v2 id4 id5
-
-      Source |       SS           df       MS      Number of obs   = 5,000,000
--------------+----------------------------------   F(7, 4999992)   =      0.93
-       Model |  5802.81474         7  828.973534   Prob > F        =    0.4804
-    Residual |  4.4497e+09 4,999,992  889.933859   R-squared       =    0.0000
--------------+----------------------------------   Adj R-squared   =   -0.0000
-       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
-
-------------------------------------------------------------------------------
-          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-          v1 |
-          2  |   .0121412   .0421855     0.29   0.773    -.0705409    .0948233
-          3  |    .028792   .0421784     0.68   0.495    -.0538761    .1114601
-          4  |   .0152643   .0422062     0.36   0.718    -.0674585     .097987
-          5  |  -.0220314   .0421862    -0.52   0.602    -.1047149     .060652
-             |
-          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
-         id4 |   .0046467   .0023132     2.01   0.045     .0001128    .0091805
-         id5 |  -.0020256   .0023138    -0.88   0.381    -.0065606    .0025095
-       _cons |   50.75566   .0510489   994.26   0.000     50.65561    50.85571
-------------------------------------------------------------------------------
-r; t=0.91 0:12:02
-
-. Toc, n(`i')
-r; t=0.00 0:12:02
-
-. 
-. Tic, n(`++i')
-r; t=0.00 0:12:02
-
-. reghdfe v3 v2 id4 id5 i.v1, a(id6) vce(cluster id6) tolerance(1e-6)
-(dropped 215 singleton observations)
-(MWFE estimator converged in 1 iterations)
-
-HDFE Linear regression                            Number of obs   =  4,999,785
-Absorbing 1 HDFE group                            F(   7, 499763) =       0.90
-Statistics robust to heteroskedasticity           Prob > F        =     0.5068
-                                                  R-squared       =     0.0998
-                                                  Adj R-squared   =    -0.0002
-                                                  Within R-sq.    =     0.0000
-Number of clusters (id6)     =    499,764         Root MSE        =    29.8347
-
-                              (Std. err. adjusted for 499,764 clusters in id6)
-------------------------------------------------------------------------------
-             |               Robust
-          v3 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-          v2 |   3.16e-08   4.87e-08     0.65   0.517    -6.39e-08    1.27e-07
-         id4 |   .0046862    .002439     1.92   0.055    -.0000942    .0094667
-         id5 |  -.0028618   .0024391    -1.17   0.241    -.0076424    .0019187
-             |
-          v1 |
-          2  |  -.0025847   .0445088    -0.06   0.954    -.0898206    .0846513
-          3  |   .0138799    .044506     0.31   0.755    -.0733504    .1011102
-          4  |  -.0022388   .0445003    -0.05   0.960     -.089458    .0849803
-          5  |  -.0254372   .0445467    -0.57   0.568    -.1127473     .061873
-             |
-       _cons |   50.76483   .0519623   976.95   0.000     50.66298    50.86667
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-         id6 |    499764      499764           0    *|
------------------------------------------------------+
-* = FE nested within cluster; treated as redundant for DoF computation
-r; t=8.03 0:12:10
-
-. Toc, n(`i')
-r; t=0.00 0:12:10
-
-. 
-. gegen g = group(id3)
-r; t=0.87 0:12:11
-
-. Tic, n(`++i')
-r; t=0.00 0:12:11
-
-. reghdfe v3 v2 id4 id5 i.v1, absorb(id6 g) vce(cluster id6)  tolerance(1e-6)
-(dropped 440 singleton observations)
-(MWFE estimator converged in 7 iterations)
-
-HDFE Linear regression                            Number of obs   =  4,999,560
-Absorbing 2 HDFE groups                           F(   7, 499763) =       1.04
-Statistics robust to heteroskedasticity           Prob > F        =     0.4008
-                                                  R-squared       =     0.1999
-                                                  Adj R-squared   =    -0.0000
-                                                  Within R-sq.    =     0.0000
-Number of clusters (id6)     =    499,764         Root MSE        =    29.8321
-
-                              (Std. err. adjusted for 499,764 clusters in id6)
-------------------------------------------------------------------------------
-             |               Robust
-          v3 | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
--------------+----------------------------------------------------------------
-          v2 |   4.03e-08   5.14e-08     0.79   0.432    -6.04e-08    1.41e-07
-         id4 |   .0050529   .0025737     1.96   0.050     8.56e-06    .0100973
-         id5 |  -.0024992   .0025761    -0.97   0.332    -.0075483      .00255
-             |
-          v1 |
-          2  |    .007267   .0468902     0.15   0.877    -.0846364    .0991704
-          3  |   .0372648   .0469507     0.79   0.427    -.0547571    .1292867
-          4  |   .0043666   .0469363     0.09   0.926    -.0876272    .0963603
-          5  |  -.0264769   .0469703    -0.56   0.573    -.1185372    .0655834
-             |
-       _cons |   50.74505   .0547803   926.34   0.000     50.63769    50.85242
-------------------------------------------------------------------------------
-
-Absorbed degrees of freedom:
------------------------------------------------------+
- Absorbed FE | Categories  - Redundant  = Num. Coefs |
--------------+---------------------------------------|
-         id6 |    499764      499764           0    *|
-           g |    499748           1      499747     |
------------------------------------------------------+
-* = FE nested within cluster; treated as redundant for DoF computation
-r; t=33.77 0:12:45
-
-. Toc, n(`i')
-r; t=0.00 0:12:45
-
-. 
-. /* plot */
-. keep if _n <= 1000
-(4,999,000 observations deleted)
-r; t=0.12 0:12:45
-
-. Tic, n(`++i')
-r; t=0.00 0:12:45
-
-. twoway (scatter v2 v1)
-r; t=0.48 0:12:46
-
-. graph export "${rootdir}/output/plot_stata.pdf", replace
-file /project/output/plot_stata.pdf saved as PDF format
-r; t=0.04 0:12:46
-
-. Toc, n(`i')
-r; t=0.00 0:12:46
-
-. 
-. drop _all
-r; t=0.00 0:12:46
-
-. gen result = .
-r; t=0.00 0:12:46
-
-. set obs `i'
-Number of observations (_N) was 0, now 30.
-r; t=0.00 0:12:46
-
-. timer list
-   1:     18.60 /        1 =      18.6010
-   2:      0.30 /        1 =       0.3030
-   3:      0.10 /        1 =       0.0960
-   4:      7.32 /        1 =       7.3240
-   5:      2.95 /        1 =       2.9530
-   6:      2.67 /        1 =       2.6700
-   7:      1.34 /        1 =       1.3410
-   8:      0.50 /        1 =       0.5020
-   9:     29.37 /        1 =      29.3700
-  10:      6.92 /        1 =       6.9170
-  11:      1.15 /        1 =       1.1490
-  12:      1.12 /        1 =       1.1210
-  13:      1.69 /        1 =       1.6850
-  14:      1.83 /        1 =       1.8310
-  15:      0.73 /        1 =       0.7310
-  16:      4.23 /        1 =       4.2260
-  17:      0.80 /        1 =       0.8050
-  18:      1.15 /        1 =       1.1510
-  19:      2.80 /        1 =       2.8040
-  20:      0.82 /        1 =       0.8180
-  21:      2.10 /        1 =       2.1000
-  22:      0.87 /        1 =       0.8680
-  23:      2.12 /        1 =       2.1180
-  24:      1.50 /        1 =       1.5000
-  25:      3.64 /        1 =       3.6380
-  26:      0.67 /        1 =       0.6740
-  27:      0.90 /        1 =       0.9010
-  28:      8.03 /        1 =       8.0300
-  29:     33.77 /        1 =      33.7730
-  30:      0.52 /        1 =       0.5230
-r; t=0.00 0:12:46
-
-. forval j = 1/`i'{
-  2.         replace result = r(t`j') if _n == `j'
-  3. }
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-(1 real change made)
-r; t=0.00 0:12:46
-
-. outsheet using "${rootdir}/output/resultStata1e7.csv", replace
-(file /project/output/resultStata1e7.csv not found)
-r; t=0.00 0:12:46
 
 . 
 end of do-file
-r; t=0.00 0:12:46

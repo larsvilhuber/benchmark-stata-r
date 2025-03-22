@@ -6,7 +6,22 @@ ssc install reghdfe
 ssc install autorename
 ssc install ftools
 ***************************************************************************************************/
-include "../config.do"
+
+local scenario "A" 
+/* This works on all OS when running in batch mode, but may not work in interactive mode */
+local pwd : pwd                     // This always captures the current directory
+
+if "`scenario'" == "A" {             // If in Scenario A, we need to change directory first
+    cd ..
+}
+if "`scenario'" == "C" {             // If in Scenario C, we need to go up twice
+    cd ../..
+}
+global rootdir : pwd                // Now capture the directory to use as rootdir
+display in red "Rootdir has been set to: $rootdir"
+
+
+
 /* timer helpers */
 cap program drop Tic
 program define Tic
@@ -196,12 +211,12 @@ reg v3 i.v1 v2 id4 id5
 Toc, n(`i')
 
 Tic, n(`++i')
-reghdfe v3 v2 id4 id5 i.v1, a(id6) vce(cluster id6) tolerance(1e-6)
+reghdfe v3 v2 id4 id5 i.v1, a(id6) vce(cluster id6) tolerance(1e-6) parallel(`cores')
 Toc, n(`i')
 
 gegen g = group(id3)
 Tic, n(`++i')
-reghdfe v3 v2 id4 id5 i.v1, absorb(id6 g) vce(cluster id6)  tolerance(1e-6)
+reghdfe v3 v2 id4 id5 i.v1, absorb(id6 g) vce(cluster id6)  tolerance(1e-6) parallel(`cores')
 Toc, n(`i')
 
 /* plot */
@@ -219,3 +234,8 @@ forval j = 1/`i'{
 	replace result = r(t`j') if _n == `j'
 }
 outsheet using "${rootdir}/output/resultStata1e7.csv", replace
+
+
+/* system info */
+
+creturn list

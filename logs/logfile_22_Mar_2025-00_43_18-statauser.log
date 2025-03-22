@@ -1,0 +1,944 @@
+-------------------------------------------------------------------------------
+      name:  ldi
+       log:  /project/logs/logfile_22_Mar_2025-00_43_18-statauser.log
+  log type:  text
+ opened on:  22 Mar 2025, 00:43:18
+r; t=0.00 0:43:18
+
+. 
+. /* capture what system we are running on */
+. 
+. di in red "HOSTNAME: `c(hostname)'"
+HOSTNAME: 01de1eec72b5
+r; t=0.00 0:43:18
+
+. 
+. /* used only for system info */
+. log using "`systeminfo'", name(system) replace text
+(file /project/logs/system_22_Mar_2025-00_43_18-statauser.log not found)
+-------------------------------------------------------------------------------
+      name:  system
+       log:  /project/logs/system_22_Mar_2025-00_43_18-statauser.log
+  log type:  text
+ opened on:  22 Mar 2025, 00:43:18
+r; t=0.00 0:43:18
+
+. 
+. /* It will provide some info about how and when the program was run */
+. 
+. /* install any packages locally */
+. di "=== Redirecting where Stata searches for ado files ==="
+=== Redirecting where Stata searches for ado files ===
+r; t=0.00 0:43:18
+
+. capture mkdir "$rootdir/ado"
+r; t=0.00 0:43:18
+
+. adopath - PERSONAL
+  [1]  (BASE)      "/usr/local/stata/ado/base/"
+  [2]  (SITE)      "/usr/local/ado/"
+  [3]              "."
+  [4]  (PLUS)      "~/ado/plus/"
+  [5]  (OLDPLACE)  "~/ado/"
+r; t=0.00 0:43:18
+
+. adopath - OLDPLACE
+  [1]  (BASE)      "/usr/local/stata/ado/base/"
+  [2]  (SITE)      "/usr/local/ado/"
+  [3]              "."
+  [4]  (PLUS)      "~/ado/plus/"
+r; t=0.00 0:43:18
+
+. adopath - SITE
+  [1]  (BASE)      "/usr/local/stata/ado/base/"
+  [2]              "."
+  [3]  (PLUS)      "~/ado/plus/"
+r; t=0.00 0:43:18
+
+. sysdir set PLUS     "$rootdir/ado/plus"
+r; t=0.00 0:43:18
+
+. sysdir set PERSONAL "$rootdir/ado"       // may be needed for some packages
+r; t=0.00 0:43:18
+
+. sysdir
+   STATA:  /usr/local/stata/
+    BASE:  /usr/local/stata/ado/base/
+    SITE:  /usr/local/ado/
+    PLUS:  /project/ado/plus/
+PERSONAL:  /project/ado/
+OLDPLACE:  ~/ado/
+r; t=0.00 0:43:18
+
+. 
+. /*===========================================================================
+> ===================*/
+. /* If present, add the authors' replication-package specific ado file path   
+>                    */
+. /* This is defined above                                                     
+>                    */
+. /*===========================================================================
+> ===================*/
+. 
+. if "`author_adopath'" != "" {             // The author adopath variable is f
+> illed out
+.     adopath ++ "$rootdir/`author_adopath'"
+r; t=0.00 0:43:18
+. }
+r; t=0.00 0:43:18
+
+. 
+. /* now let's check what's there */
+. 
+. di "=== Verifying pre-existing ado files - normally, this should be EMPTY upo
+> n first run"
+=== Verifying pre-existing ado files - normally, this should be EMPTY upon firs
+> t run
+r; t=0.00 0:43:18
+
+. adopath
+  [1]  (BASE)      "/usr/local/stata/ado/base/"
+  [2]              "."
+  [3]  (PLUS)      "/project/ado/plus/"
+r; t=0.00 0:43:18
+
+. ado
+
+[1] package gtools from http://fmwww.bc.edu/repec/bocode/g
+      'GTOOLS': module to provide a fast implementation of common group command
+> s
+
+[2] package fastreshape from http://fmwww.bc.edu/repec/bocode/f
+      'FASTRESHAPE': module for efficient implementation of reshape for big dat
+> asets
+
+[3] package autorename from http://fmwww.bc.edu/repec/bocode/a
+      'AUTORENAME': module to automatically rename variables
+
+[4] package cli-compat from https://raw.githubusercontent.com/aeadataeditor/cli
+> -compat-stata/master
+      'cli-compat': Commands that provide compatibility with programs written w
+> ith GUI Stata in mind.
+
+[5] package ftools from https://raw.githubusercontent.com/sergiocorreia/ftools/
+> master/src
+      ftools. Alternatives to common Stata commands optimized for large dataset
+> s
+
+[6] package reghdfe from https://raw.githubusercontent.com/sergiocorreia/reghdf
+> e/master/src
+      REGHDFE: Linear models with multi-way fixed effects and multi-way cluster
+> ing
+r; t=0.00 0:43:18
+
+. di "=========================="
+==========================
+r; t=0.00 0:43:18
+
+. 
+. 
+. /* this is long, so we pause the main log file */
+. log off ldi
+      name:  ldi
+       log:  /project/logs/logfile_22_Mar_2025-00_43_18-statauser.log
+  log type:  text
+ paused on:  22 Mar 2025, 00:43:18
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+      name:  ldi
+       log:  /project/logs/logfile_22_Mar_2025-00_43_18-statauser.log
+  log type:  text
+resumed on:  22 Mar 2025, 00:43:18
+r; t=0.00 0:43:18
+
+. 
+. 
+. /* add packages to the macro */
+.     
+.     display in red "============ Installing packages/commands from SSC ======
+> ======="
+============ Installing packages/commands from SSC =============
+r; t=0.00 0:43:18
+
+.     display in red "== Packages: `ssc_packages'"
+== Packages: gtools fastreshape  autorename parallel
+r; t=0.00 0:43:18
+
+.     if !missing("`ssc_packages'") {
+.         foreach pkg in `ssc_packages' {
+  2.             capture which `pkg'
+  3.             if _rc == 111 {                 
+  4.                dis "Installing `pkg'"
+  5.                 ssc install `pkg', replace
+  6.             }
+  7.             which `pkg'
+  8.         }
+/project/ado/plus/g/gtools.ado
+*! version 1.10.1 05Dec2022 Mauricio Caceres Bravo, mauricio.caceres.bravo@gmai
+> l.com
+*! Program for managing the gtools package installation
+/project/ado/plus/f/fastreshape.ado
+/project/ado/plus/a/autorename.ado
+*! autorename 1.0.1 8jul2009 by Julian Reif
+Installing parallel
+checking parallel consistency and verifying not already installed...
+installing into /project/ado/plus/...
+installation complete.
+/project/ado/plus/p/parallel.ado
+*! version 1.15.8.19  19agol2015
+*! PARALLEL: Stata module for parallel computing
+*! by George G. Vega [cre,aut], Brian Quistorff [ctb]
+*! 
+*! Project website: 
+*!   https://github.com/gvegayon/parallel
+*! Bug reports:
+*!   https://github.com/gvegayon/parallel/issues
+r; t=0.49 0:43:18
+.     }
+r; t=0.49 0:43:18
+
+. 
+. /* add unconditionally installed packages */
+.     display in red "=============== Unconditionally installed packages from S
+> SC ==============="
+=============== Unconditionally installed packages from SSC ===============
+r; t=0.00 0:43:18
+
+.     display in red "== Packages: `ssc_unconditional'"
+== Packages: 
+r; t=0.00 0:43:18
+
+.     if !missing("`ssc_unconditional'") {
+.         foreach pkg in `ssc_unconditional' {
+  2.             dis "Installing `pkg'"
+  3.             ssc install `pkg', replace
+  4.         }
+r; t=0.00 0:43:18
+.     }
+r; t=0.00 0:43:18
+
+. 
+. /*===========================================================================
+> ===================*/
+. /* If you need to "net install" packages, add lines to this section          
+>                    */
+.     * Install packages using net
+.     * net install grc1leg, from("http://www.stata.com/users/vwiggins/")
+. 
+. * Install ftools (remove program if it existed previously)
+. cap ado uninstall ftools
+r; t=0.00 0:43:18
+
+. net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/fto
+> ols/master/src/")
+checking ftools consistency and verifying not already installed...
+installing into /project/ado/plus/...
+installation complete.
+r; t=2.84 0:43:21
+
+. 
+. * Install reghdfe 6.x
+. cap ado uninstall reghdfe
+r; t=0.00 0:43:21
+
+. net install reghdfe, from("https://raw.githubusercontent.com/sergiocorreia/re
+> ghdfe/master/src/")
+checking reghdfe consistency and verifying not already installed...
+installing into /project/ado/plus/...
+installation complete.
+r; t=1.74 0:43:23
+
+. 
+. /*===========================================================================
+> ===================*/
+. /* yet other programs have no install capability, and may need to be copied *
+> /
+. /*===========================================================================
+> ===================*/
+. 
+. // e.g.
+. //  copy (URL) (name_of_file.ado)
+. // example:
+. // copy http://www.sacarny.com/wp-content/uploads/2015/08/ebayes.ado ebayes.a
+> do
+. 
+. 
+. /*===========================================================================
+> ===================*/
+. /* This toolbox allows us to run code that still contains interactive command
+> s (which it should not) */
+. /*===========================================================================
+> ===================*/
+. 
+. net install cli-compat, all replace from("https://raw.githubusercontent.com/a
+> eadataeditor/cli-compat-stata/master")
+checking cli-compat consistency and verifying not already installed...
+all files already exist and are up to date.
+r; t=1.49 0:43:25
+
+. 
+. /*-------------- Sometimes, you may get the dreaded esttab error about paths 
+> -------------------*/
+. /* in that case, uncomment the following line, and overwrite the estout packa
+> ge with the newer one */
+. 
+. // net install estout, replace from(https://raw.githubusercontent.com/benjann
+> /estout/master/)
+. 
+. /*===========================================================================
+> ===================*/
+. /* after installing all packages, it may be necessary to issue the mata mlib 
+> index command */
+. /* This should always be the LAST command after installing all packages      
+>               */
+. /*===========================================================================
+> ===================*/
+. 
+.         mata: mata mlib index
+.mlib libraries to be searched are now
+    lmatabase;lmataado;lmatabma;lmatacollect;lmatadata;lmataerm;lmatafc;lmatags
+> em;lmatahetdid;lmataivqreg;lmatajm;lmatalasso;lmatamcmc;lmatameta;lmatami;lma
+> tamixlog;lmatanumlib;lmataopt;lmatapath;lmatapostest;lmatapss;lmatasem;lmatas
+> p;lmatasvy;lmatatab;lmatats;lgtools;lparallel
+r; t=0.00 0:43:25
+
+. 
+. /*===========================================================================
+> ===================*/
+. /* This is specific to AEA replication environment. May not be needed if no c
+> onfidential data   */
+. /* are used in the reproducibility check.                                    
+>                    */
+. /* Replicator should check the JIRA field "Working location of restricted dat
+> a" for right path  */
+. /*===========================================================================
+> ===================*/
+. 
+. global sdrive ""
+r; t=0.00 0:43:25
+
+. 
+. 
+. /*===========================================================================
+> ===================*/
+. /* After all the setup work, let's check again what's installed in the ado di
+> rectories          */
+. /*===========================================================================
+> ===================*/
+. 
+. 
+. di "=== Verifying ado files after all install steps"
+=== Verifying ado files after all install steps
+r; t=0.00 0:43:25
+
+. adopath
+  [1]  (BASE)      "/usr/local/stata/ado/base/"
+  [2]              "."
+  [3]  (PLUS)      "/project/ado/plus/"
+r; t=0.00 0:43:25
+
+. ado
+
+[1] package gtools from http://fmwww.bc.edu/repec/bocode/g
+      'GTOOLS': module to provide a fast implementation of common group command
+> s
+
+[2] package fastreshape from http://fmwww.bc.edu/repec/bocode/f
+      'FASTRESHAPE': module for efficient implementation of reshape for big dat
+> asets
+
+[3] package autorename from http://fmwww.bc.edu/repec/bocode/a
+      'AUTORENAME': module to automatically rename variables
+
+[4] package cli-compat from https://raw.githubusercontent.com/aeadataeditor/cli
+> -compat-stata/master
+      'cli-compat': Commands that provide compatibility with programs written w
+> ith GUI Stata in mind.
+
+[5] package parallel from http://fmwww.bc.edu/repec/bocode/p
+      'PARALLEL': module for Parallel Computing
+
+[6] package ftools from https://raw.githubusercontent.com/sergiocorreia/ftools/
+> master/src
+      ftools. Alternatives to common Stata commands optimized for large dataset
+> s
+
+[7] package reghdfe from https://raw.githubusercontent.com/sergiocorreia/reghdf
+> e/master/src
+      REGHDFE: Linear models with multi-way fixed effects and multi-way cluster
+> ing
+r; t=0.00 0:43:25
+
+. di "=========================="
+==========================
+r; t=0.00 0:43:25
+
+. 
+. 
+. 
+. di "========================================= END SETUP + DIAGNOSTICS =======
+> ============================="
+========================================= END SETUP + DIAGNOSTICS =============
+> =======================
+r; t=0.00 0:43:25
+
+. r; t=0.00 0:43:25
+
+. /* timer helpers */
+. cap program drop Tic
+r; t=0.00 0:43:25
+
+. program define Tic
+  1.         syntax, n(integer)
+  2.         timer on `n'
+  3. end
+r; t=0.00 0:43:25
+
+. 
+. cap program drop Toc
+r; t=0.00 0:43:25
+
+. program define Toc
+  1.         syntax, n(integer) 
+  2.         timer off `n'
+  3. end
+r; t=0.00 0:43:25
+
+. 
+. /*capture the number of processors */
+. 
+. di "Number of processors: " `=c(processors)'
+Number of processors: 24
+r; t=0.00 0:43:25
+
+. di "Version of Stata:  `c(edition_real)'"
+Version of Stata:  MP
+r; t=0.00 0:43:25
+
+. 
+. /* read processors from R output CSV, and set local macro */
+. import delimited using "${rootdir}/output/cores.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(1 var, 1 obs)
+r; t=0.16 0:43:25
+
+. local cores = cores[1]
+r; t=0.00 0:43:25
+
+. di "Number of processors used: " `cores'
+Number of processors used: 24
+r; t=0.00 0:43:25
+
+. clear
+r; t=0.00 0:43:25
+
+. 
+. 
+. import delimited using "${rootdir}/data/merge_string.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(2 vars, 6,319,836 obs)
+r; t=4.11 0:43:29
+
+. autorename
+(1 observation deleted)
+r; t=20.55 0:43:49
+
+. save "${rootdir}/data/merge_string.dta", replace
+file /project/data/merge_string.dta saved
+r; t=0.17 0:43:50
+
+. 
+. import delimited using "${rootdir}/data/merge_int.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(2 vars, 6,320,882 obs)
+r; t=3.60 0:43:53
+
+. save "${rootdir}/data/merge_int.dta", replace
+file /project/data/merge_int.dta saved
+r; t=0.05 0:43:53
+
+. 
+. /****************************************************************************
+> ***********************
+> 
+> *****************************************************************************
+> **********************/
+. 
+. /* benchmark */
+. set processors 2
+    The maximum number of processors or cores being used is changed from 24
+    to 2.  It can be set to any number between 1 and 24
+r; t=0.00 0:43:53
+
+. 
+. timer clear
+r; t=0.00 0:43:53
+
+. local i = 0
+r; t=0.00 0:43:53
+
+. /* write and read */
+. Tic, n(`++i')
+r; t=0.00 0:43:53
+
+. import delimited using "${rootdir}/data/1e7.csv", clear
+(encoding automatically selected: ISO-8859-1)
+(9 vars, 10,000,000 obs)
+r; t=21.70 0:44:15
+
+. Toc, n(`i')
+r; t=0.00 0:44:15
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:44:15
+
+. save "${rootdir}/data/1e7.dta", replace
+file /project/data/1e7.dta saved
+r; t=0.36 0:44:15
+
+. Toc, n(`i')
+r; t=0.00 0:44:15
+
+. 
+. drop _all 
+r; t=0.00 0:44:15
+
+. Tic, n(`++i')
+r; t=0.00 0:44:15
+
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.10 0:44:15
+
+. Toc, n(`i')
+r; t=0.00 0:44:15
+
+. 
+. /* sort  */
+. Tic, n(`++i')
+r; t=0.00 0:44:15
+
+. sort id3 
+r; t=6.69 0:44:22
+
+. Toc, n(`i')
+r; t=0.00 0:44:22
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:44:22
+
+. sort id6
+r; t=2.70 0:44:25
+
+. Toc, n(`i')
+r; t=0.00 0:44:25
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:44:25
+
+. sort v3
+r; t=2.46 0:44:27
+
+. Toc, n(`i')
+r; t=0.00 0:44:27
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:44:27
+
+. gdistinct id3
+
+       |        Observations
+       |      total   distinct
+-------+----------------------
+   id3 |   1.00e+07     500000
+r; t=1.08 0:44:28
+
+. Toc, n(`i')
+r; t=0.00 0:44:28
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:44:28
+
+. gdistinct id6
+
+       |        Observations
+       |      total   distinct
+-------+----------------------
+   id6 |   1.00e+07     500000
+r; t=0.31 0:44:29
+
+. Toc, n(`i')
+r; t=0.00 0:44:29
+
+. 
+. /* merge */
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.12 0:44:29
+
+. Tic, n(`++i')
+r; t=0.00 0:44:29
+
+. fmerge m:1 id1 id3 using "${rootdir}/data/merge_string.dta", keep(master matc
+> hed) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                        10,000,000  
+    -----------------------------------------
+r; t=28.11 0:44:57
+
+. Toc, n(`i')
+r; t=0.00 0:44:57
+
+. 
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.10 0:44:57
+
+. Tic, n(`++i')
+r; t=0.00 0:44:57
+
+. fmerge m:1 id4 id6 using "${rootdir}/data/merge_int.dta", keep(master matched
+> ) nogen
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                        10,000,000  
+    -----------------------------------------
+r; t=6.79 0:45:04
+
+. Toc, n(`i')
+r; t=0.00 0:45:04
+
+. 
+. /* append */
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.10 0:45:04
+
+. Tic, n(`++i')
+r; t=0.00 0:45:04
+
+. append using "${rootdir}/data/1e7.dta"
+r; t=1.15 0:45:05
+
+. Toc, n(`i')
+r; t=0.00 0:45:05
+
+. 
+. /* reshape */
+. bys id1 id2 id3: keep if _n == 1
+(10,245,721 observations deleted)
+r; t=37.51 0:45:43
+
+. keep if _n < _N/10
+(8,778,852 observations deleted)
+r; t=0.27 0:45:43
+
+. foreach v of varlist id4 id5 id6 v1 v2 v3{
+  2.         rename `v' v_`v'
+  3. }
+r; t=0.01 0:45:43
+
+. Tic, n(`++i')
+r; t=0.00 0:45:43
+
+. greshape long v_, i(id1 id2 id3) j(variable) string
+(note: j = id4 id5 id6 v1 v2 v3)
+(note: cannot preserve variable formats when reshaping long)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                  975,427   ->   5,852,562            
+Number of variables                    9  ->   5                    
+j (6 values)                              ->   variable
+xij variables:
+                   v_id4 v_id5 ... v_v3   ->   v_
+-----------------------------------------------------------------------------
+r; t=1.11 0:45:44
+
+. Toc, n(`i')
+r; t=0.00 0:45:44
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:44
+
+. greshape wide v_, i(id1 id2 id3) j(variable) string
+Option -string- ignored with greshape wide
+(note: j = id4 id5 id6 v1 v2 v3)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                5,852,562   ->   975,427              
+Number of variables                    5  ->   9                    
+j (6 values)                   variable   ->   (dropped)
+xij variables:
+                                     v_   ->   v_id4 v_id5 ... v_v3
+-----------------------------------------------------------------------------
+r; t=1.68 0:45:46
+
+. Toc, n(`i')
+r; t=0.00 0:45:46
+
+. 
+. /* recode */
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.12 0:45:46
+
+. Tic, n(`++i')
+r; t=0.00 0:45:46
+
+. gen v1_name = ""
+(10,000,000 missing values generated)
+r; t=0.18 0:45:46
+
+. replace v1_name = "first" if v1 == 1
+variable v1_name was str1 now str5
+(2,001,933 real changes made)
+r; t=0.59 0:45:46
+
+. replace v1_name = "second" if inlist(v1, 2, 3)
+variable v1_name was str5 now str6
+(4,001,833 real changes made)
+r; t=0.73 0:45:47
+
+. replace v1_name = "third" if inlist(v1, 4, 5)
+(3,996,234 real changes made)
+r; t=0.39 0:45:48
+
+. Toc, n(`i')
+r; t=0.00 0:45:48
+
+. drop v1_name
+r; t=0.00 0:45:48
+
+. 
+. /* functions */
+. Tic, n(`++i')
+r; t=0.00 0:45:48
+
+. gquantiles temp = v3, n(10) xtile
+r; t=0.74 0:45:48
+
+. Toc, n(`i')
+r; t=0.00 0:45:48
+
+. drop temp
+r; t=0.00 0:45:48
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:48
+
+. gegen temp = group(id1 id3)
+r; t=4.27 0:45:53
+
+. Toc, n(`i')
+r; t=0.00 0:45:53
+
+. drop temp
+r; t=0.00 0:45:53
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:53
+
+. gegen temp = group(id4 id6)
+r; t=0.79 0:45:53
+
+. Toc, n(`i')
+r; t=0.00 0:45:53
+
+. drop temp
+r; t=0.00 0:45:53
+
+. 
+. 
+. /* split apply combine */ 
+. Tic, n(`++i')
+r; t=0.00 0:45:53
+
+. gegen temp = sum(v3), by(id1)
+r; t=1.12 0:45:55
+
+. Toc, n(`i')
+r; t=0.00 0:45:55
+
+. drop temp
+r; t=0.00 0:45:55
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:55
+
+. gegen temp = sum(v3), by(id3)
+r; t=2.91 0:45:57
+
+. Toc, n(`i')
+r; t=0.00 0:45:57
+
+. drop temp
+r; t=0.00 0:45:57
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:57
+
+. gegen temp = sum(v3), by(id4)
+r; t=0.86 0:45:58
+
+. Toc, n(`i')
+r; t=0.00 0:45:58
+
+. drop temp
+r; t=0.00 0:45:58
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:45:58
+
+. gegen temp = sum(v3), by(id6)
+r; t=2.08 0:46:00
+
+. Toc, n(`i')
+r; t=0.00 0:46:00
+
+. drop temp
+r; t=0.00 0:46:00
+
+. 
+. 
+. Tic, n(`++i')
+r; t=0.00 0:46:00
+
+. gegen temp = sd(v3), by(id4)
+r; t=0.88 0:46:01
+
+. Toc, n(`i')
+r; t=0.00 0:46:01
+
+. drop temp
+r; t=0.00 0:46:01
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:46:01
+
+. gegen temp = sd(v3), by(id6)
+r; t=2.11 0:46:03
+
+. Toc, n(`i')
+r; t=0.00 0:46:03
+
+. drop temp
+r; t=0.00 0:46:03
+
+. 
+. 
+. Tic, n(`++i')
+r; t=0.00 0:46:03
+
+. gcollapse (mean) v1 v2 (sum) v3,  by(id1) fast
+r; t=1.49 0:46:05
+
+. Toc, n(`i')
+r; t=0.00 0:46:05
+
+. 
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.11 0:46:05
+
+. Tic, n(`++i')
+r; t=0.00 0:46:05
+
+. gcollapse (mean) v1 v2 (sum) v3,  by(id3) fast
+r; t=3.64 0:46:09
+
+. Toc, n(`i')
+r; t=0.00 0:46:09
+
+. 
+. 
+. /* regress */
+. use "${rootdir}/data/1e7.dta", clear
+r; t=0.12 0:46:09
+
+. keep if _n <= _N/2
+(5,000,000 observations deleted)
+r; t=0.28 0:46:09
+
+. Tic, n(`++i')
+r; t=0.00 0:46:09
+
+. reg v3 v1 v2 id4 id5
+
+      Source |       SS           df       MS      Number of obs   = 5,000,000
+-------------+----------------------------------   F(4, 4999995)   =      1.27
+       Model |   4508.7625         4  1127.19062   Prob > F        =    0.2806
+    Residual |  4.4497e+09 4,999,995  889.933584   R-squared       =    0.0000
+-------------+----------------------------------   Adj R-squared   =    0.0000
+       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
+
+------------------------------------------------------------------------------
+          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v1 |  -.0040975   .0094338    -0.43   0.664    -.0225874    .0143925
+          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
+         id4 |   .0046459   .0023132     2.01   0.045      .000112    .0091797
+         id5 |  -.0020263   .0023138    -0.88   0.381    -.0065613    .0025088
+       _cons |    50.7748   .0519062   978.20   0.000     50.67307    50.87653
+------------------------------------------------------------------------------
+r; t=0.65 0:46:10
+
+. Toc, n(`i')
+r; t=0.00 0:46:10
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:46:10
+
+. reg v3 i.v1 v2 id4 id5
+
+      Source |       SS           df       MS      Number of obs   = 5,000,000
+-------------+----------------------------------   F(7, 4999992)   =      0.93
+       Model |  5802.81474         7  828.973534   Prob > F        =    0.4804
+    Residual |  4.4497e+09 4,999,992  889.933859   R-squared       =    0.0000
+-------------+----------------------------------   Adj R-squared   =   -0.0000
+       Total |  4.4497e+09 4,999,999  889.933774   Root MSE        =    29.832
+
+------------------------------------------------------------------------------
+          v3 | Coefficient  Std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+          v1 |
+          2  |   .0121412   .0421855     0.29   0.773    -.0705409    .0948233
+          3  |    .028792   .0421784     0.68   0.495    -.0538761    .1114601
+          4  |   .0152643   .0422062     0.36   0.718    -.0674585     .097987
+          5  |  -.0220314   .0421862    -0.52   0.602    -.1047149     .060652
+             |
+          v2 |   1.29e-08   4.62e-08     0.28   0.780    -7.77e-08    1.03e-07
+         id4 |   .0046467   .0023132     2.01   0.045     .0001128    .0091805
+         id5 |  -.0020256   .0023138    -0.88   0.381    -.0065606    .0025095
+       _cons |   50.75566   .0510489   994.26   0.000     50.65561    50.85571
+------------------------------------------------------------------------------
+r; t=0.91 0:46:11
+
+. Toc, n(`i')
+r; t=0.00 0:46:11
+
+. 
+. Tic, n(`++i')
+r; t=0.00 0:46:11
+
+. reghdfe v3 v2 id4 id5 i.v1, a(id6) vce(cluster id6) tolerance(1e-6) parallel(
+> `cores')
+(dropped 215 singleton observations)
+ invalid parallel subcommandinvalid syntax
+r(198); t=3.65 0:46:14
+
+end of do-file
+r(198); t=0.00 0:46:14

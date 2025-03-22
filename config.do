@@ -47,7 +47,7 @@
 
 local scenario "A" 
 * *** Add required packages from SSC to this list ***
-local ssc_packages "gtools fastreshape reghdfe autorename ftools"
+local ssc_packages "gtools fastreshape  autorename parallel"
     // Example:
     // local ssc_packages "estout boottest"
     // 
@@ -195,6 +195,14 @@ log on ldi
 /* If you need to "net install" packages, add lines to this section                             */
     * Install packages using net
     * net install grc1leg, from("http://www.stata.com/users/vwiggins/")
+
+* Install ftools (remove program if it existed previously)
+cap ado uninstall ftools
+net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/ftools/master/src/")
+
+* Install reghdfe 6.x
+cap ado uninstall reghdfe
+net install reghdfe, from("https://raw.githubusercontent.com/sergiocorreia/reghdfe/master/src/")
 
 /*==============================================================================================*/
 /* yet other programs have no install capability, and may need to be copied */

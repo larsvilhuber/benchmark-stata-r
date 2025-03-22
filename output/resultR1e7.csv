@@ -1,0 +1,31 @@
+command,result
+open csv,4.744
+save binary,1.19
+open binary,3.459
+sort string,0.768000000000001
+sort int,0.369
+sort float,0.422000000000001
+count distinct strings,0.466000000000001
+count distinct ints,0.0769999999999982
+merge string,4.75
+merge int,1.713
+append,2.706
+reshape long,0.186
+reshape wide,1.812
+recode,0.494
+xtile,0.777000000000001
+group strings,4.056
+group int,3.541
+sum over few groups (string),0.313000000000002
+sum over many groups (string),0.644999999999996
+sum over few groups (int),0.322000000000003
+sum over many groups (int),0.432000000000002
+sd over few groups (int),0.429000000000002
+sd over many groups (int),0.661999999999992
+collapse over few groups,0.405000000000001
+collapse over many groups,0.759999999999991
+reg,0.408000000000001
+reg fe,0.75
+reg hfe,1.93199999999999
+reg 2 hfe,3.845
+plot 1000 points,0.159000000000006

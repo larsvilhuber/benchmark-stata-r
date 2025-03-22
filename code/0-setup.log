@@ -1,0 +1,81 @@
+
+  ___  ____  ____  ____  ____ ®
+ /__    /   ____/   /   ____/      StataNow 18.5
+___/   /   /___/   /   /___/       MP—Parallel Edition
+
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
+                                   StataCorp
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
+
+Stata license: 2-user 32-core network, expiring 27 Apr 2025
+Serial number: 501809316179
+  Licensed to: Lars Vilhuber (Data Editor)
+               American Economic Association
+
+Notes:
+      1. Stata is running in batch mode.
+      2. Unicode is supported; see help unicode_advice.
+      3. More than 2 billion observations are allowed; see help obs_advice.
+      4. Maximum number of variables is set to 5,000 but can be increased;
+          see help set_maxvar.
+
+. do 0-setup.do 
+
+. ssc install gtools
+checking gtools consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. ssc install fastreshape
+checking fastreshape consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. //ssc install reghdfe
+. ssc install autorename
+checking autorename consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. //ssc install ftools
+. * Install ftools (remove program if it existed previously)
+. cap ado uninstall ftools
+
+. net install ftools, from("https://raw.githubusercontent.com/sergiocorreia/fto
+> ols/master/src/")
+checking ftools consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. 
+. * Install reghdfe 6.x
+. cap ado uninstall reghdfe
+
+. net install reghdfe, from("https://raw.githubusercontent.com/sergiocorreia/re
+> ghdfe/master/src/")
+checking reghdfe consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. 
+. * Install parallel, if using the parallel() option; don't install from SSC
+. cap ado uninstall parallel
+
+. net install parallel, from(https://raw.github.com/gvegayon/parallel/stable/) 
+> replace
+checking parallel consistency and verifying not already installed...
+installing into /home/vilhuber/ado/plus/...
+installation complete.
+
+. mata mata mlib index
+.mlib libraries to be searched are now
+    lmatabase;lmatami;lmatamcmc;lmatanumlib;lmatasvy;lmatalasso;lmatabma;lmatam
+> ixlog;lmataado;lmatapath;lmatahetdid;lmatajm;lmatacollect;lmataivqreg;lmatame
+> ta;lmataerm;lmatasp;lmataopt;lmatafc;lmatatab;lmatagsem;lmatapss;lmatadata;lm
+> atapostest;lmatats;lmatasem;lgtools;lkdens;lmmtxttool;lfreduse;lparallel
+
+. 
+end of do-file
